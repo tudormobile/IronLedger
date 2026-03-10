@@ -139,5 +139,8 @@ internal abstract class CimDataProviderBase : IComponentDataProvider
     /// Gets a property value from a CIM instance as a string.
     /// </summary>
     protected static string? GetPropertyValue(CimInstance instance, string propertyName)
-        => instance.CimInstanceProperties[propertyName]?.Value?.ToString();
+    {
+        var value = instance.CimInstanceProperties[propertyName]?.Value?.ToString();
+        return string.IsNullOrEmpty(value) ? null : value;
+    }
 }

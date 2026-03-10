@@ -51,5 +51,8 @@ internal abstract class CimMetadataProviderBase : IAssetMetadataProvider
     /// <param name="propertyName">The property name.</param>
     /// <returns>The property value as a string, or null if not found or empty.</returns>
     protected static string? GetPropertyValue(CimInstance instance, string propertyName)
-        => instance.CimInstanceProperties[propertyName]?.Value?.ToString();
+    {
+        var value = instance.CimInstanceProperties[propertyName]?.Value?.ToString();
+        return string.IsNullOrEmpty(value) ? null : value;
+    }
 }
