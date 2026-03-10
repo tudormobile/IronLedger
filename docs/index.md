@@ -15,7 +15,7 @@ _layout: landing
 ## 🚀 Quick Start
 
 ```cs
-using Tudormobile.IronLedger;
+using Tudormobile.IronLedgerLib;
 
 ```
 

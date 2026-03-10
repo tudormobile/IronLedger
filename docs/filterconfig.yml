@@ -1,6 +1,6 @@
 ### YamlMime:ManagedReference
 apiRules:
 - exclude:
-      uidRegex: ^*Property$
+      uidRegex: ^.*Property$
       type: Field
 

@@ -23,7 +23,7 @@ csharp_style_expression_bodied_methods = false:silent
 csharp_style_expression_bodied_constructors = false:silent
 csharp_style_expression_bodied_operators = false:silent
 
-# supress some IDE rules
+# suppress some IDE rules
 dotnet_diagnostic.IDE0130.severity = none  # Namespace doesn't match folder
 dotnet_diagnostic.IDE0290.severity = none  # Not using primary constructors
 dotnet_diagnostic.CA1873.severity = none
