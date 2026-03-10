@@ -27,7 +27,7 @@ internal class Program
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error retrieving serial number: {ex.Message}");
+            Console.WriteLine($"Error retrieving asset information: {ex.Message}");
         }
     }
 }
