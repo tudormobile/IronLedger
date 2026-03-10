@@ -6,7 +6,7 @@ The namespaces available in the *Tudormobile.IronLedgerLib* library are describe
 using Tudormobile.IronLedgerLib;
 ```
 
-- [Tudormobile.IronLedger](Tudormobile.IronLedgerLib.yml)
+- [Tudormobile.IronLedgerLib](Tudormobile.IronLedgerLib.yml)
     - Root namespace for the library.
 
 Latest unit testing results are shown below.
