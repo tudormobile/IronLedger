@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="IronLedgerLib/IronLedgerLib.csproj" />
+  <Project Path="IronLedgerLib.Tests/IronLedgerLib.Tests.csproj" />
+</Solution>
