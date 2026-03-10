@@ -43,14 +43,11 @@ dotnet run --project .\tools\AssestId\AssestId.csproj
 
 ### Output
 - Human-readable identifier line (`AssetId: ...`)
-- JSON payload with:
-	- `id_type`
-	- `metadata.serial_number`
-	- `metadata.device_id`
-	- `metadata.name`
-	- `metadata.manufacturer`
-	- `metadata.model`
-	- `metadata.generated_id`
+- JSON payload containing the serialized `AssetId` model, including:
+	- System metadata (e.g., computer system identity details used for asset identification)
+	- Baseboard metadata (e.g., board serial and related identifiers)
+	- BIOS metadata (e.g., firmware identity/build information)
+- The exact JSON schema is defined by the `AssetId` type in `tools/AssestId`.
 
 ### Notes
 - Current folder/project naming uses `AssestId` (spelling retained to match codebase).
