@@ -15,11 +15,11 @@ It is intentionally compact and structured to scale as additional tools are adde
 ## Tool Index
 | Tool | Folder | Status | Primary Purpose |
 | --- | --- | --- | --- |
-| AssestId | `tools/AssestId` | Active | Generates a stable asset identification payload from local hardware metadata. |
+| AssetId | `tools/AssetId` | Active | Generates a stable asset identification payload from local hardware metadata. |
 
 ---
 
-## Tool: AssestId
+## Tool: AssetId
 
 ### Summary
 Console utility that queries local Windows CIM/WMI data and emits an `AssetId` payload in JSON.
@@ -38,7 +38,7 @@ Console utility that queries local Windows CIM/WMI data and emits an `AssetId` p
 From repository root:
 
 ```powershell
-dotnet run --project .\tools\AssestId\AssestId.csproj
+dotnet run --project .\tools\AssetId\AssetId.csproj
 ```
 
 ### Output
@@ -53,7 +53,7 @@ dotnet run --project .\tools\AssestId\AssestId.csproj
 	- `metadata.generated_id`
 
 ### Notes
-- Current folder/project naming uses `AssestId` (spelling retained to match codebase).
+- Current folder/project naming uses `AssetId` (spelling retained to match codebase).
 - Fallback text values are used when metadata cannot be read from CIM queries.
 
 ---
