@@ -122,7 +122,7 @@ string compactJson = serializer.Serialize(assetId);
 The default JSON serializer uses the following configuration:
 
 - **WriteIndented**: `true` (formatted for readability)
-- **PropertyNamingPolicy**: `CamelCase` (JavaScript-friendly)
+- **PropertyNamingPolicy**: `SnakeCaseLower` (snake_case property names)
 - **DefaultIgnoreCondition**: `WhenWritingNull` (omit null values)
 - **Converters**: Includes `JsonStringEnumConverter` for enum serialization and `ComponentPropertyConverter` for simplified json property lists.
 
