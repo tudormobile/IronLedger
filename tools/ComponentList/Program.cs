@@ -8,7 +8,7 @@ internal class Program
 {
     static void Main(string[] args)
     {
-        Console.WriteLine("Retrieving Compnents ...\n");
+        Console.WriteLine("Retrieving Components ...\n");
         try
         {
             // Get everything at once
