@@ -5,6 +5,7 @@
 /// </summary>
 public record AssetId
 {
+    [field: NonSerialized]
     private string? _idCache;
 
     /// <summary>
@@ -57,7 +58,6 @@ public record AssetId
         );
 
         var hashBytes = sha256.ComputeHash(System.Text.Encoding.UTF8.GetBytes(input));
-        _idCache = Convert.ToHexStringLower(hashBytes);
-        return _idCache;
+        return Convert.ToHexStringLower(hashBytes);
     }
 }
