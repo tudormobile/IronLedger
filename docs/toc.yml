@@ -3,7 +3,7 @@
 - name: Project Overview
   href: project-overview.md
 - name: Serialization
-  href: serialization.md
+  href: asset-serialization.md
 - name: Tools
   href: tools.md
 - name: API Documentation

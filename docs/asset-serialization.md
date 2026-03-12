@@ -87,7 +87,7 @@ AssetId? restored = xml.DeserializeAssetId(xmlSerializer);
 using Tudormobile.IronLedgerLib.Serialization;
 
 // Create serializer with default options
-var serializer = new JsonIronLedgerSerializer();
+var serializer = new IronLedgerJsonSerializer();
 
 // Serialize
 var assetId = factory.Create();
@@ -111,7 +111,7 @@ var options = new JsonSerializerOptions
 };
 
 // Create serializer with custom options
-var serializer = new JsonIronLedgerSerializer(options);
+var serializer = new IronLedgerJsonSerializer(options);
 
 // Use it
 string compactJson = serializer.Serialize(assetId);
@@ -220,7 +220,7 @@ Console.WriteLine($"Processor Count: {restoredComponents?.Processors.Count}");
 
 ```csharp
 // Use JSON for web APIs
-var jsonSerializer = new JsonIronLedgerSerializer();
+var jsonSerializer = new IronLedgerJsonSerializer();
 string json = assetId.Serialize(jsonSerializer);
 
 // Use custom serializer for file storage
