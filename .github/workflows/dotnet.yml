@@ -40,7 +40,7 @@ jobs:
     - name: Unit tests
       run: |
         cd src
-        dotnet test --filter "TestCategory!=Integration" --coverage --report-trx
+        dotnet test --filter "TestCategory!=Integration" --collect:"XPlat Code Coverage" --report-trx
 
     - name: Build
       run: |
