@@ -1,6 +1,4 @@
-﻿using System.Text.Json;
-using System.Text.Json.Serialization;
-using Tudormobile.IronLedgerLib;
+﻿using Tudormobile.IronLedgerLib;
 
 namespace ComponentList;
 
@@ -24,14 +22,7 @@ internal class Program
             var disks = factory.GetDisks();
             var system = factory.GetSystem();
 
-            var options = new JsonSerializerOptions
-            {
-                WriteIndented = true,
-                PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
-            };
-            options.Converters.Add(new JsonStringEnumConverter());
-            options.Converters.Add(new ComponentPropertyConverter());
-            var json = JsonSerializer.Serialize(allComponents, options);
+            var json = allComponents.Serialize();
             Console.WriteLine(json);
         }
         catch (Exception ex)

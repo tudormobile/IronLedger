@@ -5,6 +5,9 @@
 /// </summary>
 public record AssetId
 {
+    [field: NonSerialized]
+    private string? _idCache;
+
     /// <summary>
     /// Gets the system level metadata associated with this asset.
     /// </summary>
@@ -20,4 +23,41 @@ public record AssetId
     /// </summary>
     public required AssetMetadata BiosMetadata { get; init; }
 
+    /// <summary>
+    /// Gets a unique identifier derived from the combined metadata.
+    /// This ID is deterministic and suitable for use as a database key.
+    /// </summary>
+    /// <remarks>
+    /// The ID is generated using SHA256 hash of all metadata properties,
+    /// ensuring consistency across multiple instantiations with the same data.
+    /// The hash is computed lazily on first access and cached for subsequent calls.
+    /// </remarks>
+    public string Id => _idCache ??= ComputeId();
+
+    /// <summary>
+    /// Returns the unique identifier for this asset.
+    /// </summary>
+    /// <returns>A 64-character hexadecimal string representing the unique identifier.</returns>
+    public override string ToString() => Id;
+
+    private string ComputeId()
+    {
+        using var sha256 = System.Security.Cryptography.SHA256.Create();
+
+        // Combine all metadata into a single string using pipe delimiter
+        var input = string.Join("|",
+            SystemMetadata.SerialNumber,
+            SystemMetadata.Manufacturer,
+            SystemMetadata.Product,
+            BaseBoardMetadata.SerialNumber,
+            BaseBoardMetadata.Manufacturer,
+            BaseBoardMetadata.Product,
+            BiosMetadata.SerialNumber,
+            BiosMetadata.Manufacturer,
+            BiosMetadata.Product
+        );
+
+        var hashBytes = sha256.ComputeHash(System.Text.Encoding.UTF8.GetBytes(input));
+        return Convert.ToHexStringLower(hashBytes);
+    }
 }

@@ -1,6 +1,4 @@
-﻿using System.Text.Json;
-using System.Text.Json.Serialization;
-using Tudormobile.IronLedgerLib;
+﻿using Tudormobile.IronLedgerLib;
 
 namespace AssetId;
 
@@ -15,14 +13,8 @@ internal class Program
         try
         {
             var assetId = factory.Create();
-            Console.WriteLine($"AssetId: {assetId}");
-            var options = new JsonSerializerOptions
-            {
-                WriteIndented = true,
-                PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
-            };
-            options.Converters.Add(new JsonStringEnumConverter());
-            var json = JsonSerializer.Serialize(assetId, options);
+            var json = assetId.Serialize();
+            Console.WriteLine(assetId);
             Console.WriteLine(json);
         }
         catch (Exception ex)
