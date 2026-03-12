@@ -22,6 +22,10 @@ public interface IIronLedgerSerializer
     /// </summary>
     /// <typeparam name="T">The type of object to deserialize.</typeparam>
     /// <param name="data">The string representation to deserialize.</param>
-    /// <returns>The deserialized object, or null if deserialization fails.</returns>
+    /// <returns>
+    /// The deserialized object. Some implementations may return null if deserialization fails,
+    /// while others may throw an exception (for example, when the input is invalid for the
+    /// chosen serialization format).
+    /// </returns>
     T? Deserialize<T>(string data);
 }
