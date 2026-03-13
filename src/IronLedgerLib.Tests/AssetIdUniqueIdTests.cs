@@ -541,4 +541,35 @@ public class AssetIdUniqueIdTests
         Assert.IsTrue(interpolated.StartsWith("Asset: "));
         Assert.IsTrue(interpolated.Contains(assetId.Id));
     }
+
+    [TestMethod]
+    public void UniqueId_AfterWithExpression_ReflectsModifiedMetadata()
+    {
+        // Arrange - access Id first to populate the cache on the original
+        var original = new AssetId
+        {
+            SystemMetadata = new AssetMetadata
+            {
+                SerialNumber = "SYS-001",
+                Manufacturer = "Dell",
+                Product = "XPS 15"
+            },
+            BaseBoardMetadata = AssetMetadata.Empty,
+            BiosMetadata = AssetMetadata.Empty
+        };
+        var originalId = original.Id; // Populate the cache
+
+        // Act - create a modified copy via `with` expression after the cache is warm
+        var modified = original with
+        {
+            SystemMetadata = original.SystemMetadata with { SerialNumber = "SYS-999" }
+        };
+
+        // Assert - the modified copy must compute a new hash, not inherit the cached one
+        Assert.AreNotEqual(originalId, modified.Id,
+            "Modified AssetId must recompute its Id and not inherit the cached value from the original.");
+
+        // Also verify the original is unchanged
+        Assert.AreEqual(originalId, original.Id);
+    }
 }

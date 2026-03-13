@@ -1,7 +1,7 @@
 using System.Text.Json;
 using Tudormobile.IronLedgerLib.Serialization;
 
-namespace IronLedgerLib.Tests;
+namespace IronLedgerLib.Tests.Serialization;
 
 [TestClass]
 public class IronLedgerJsonSerializerTests

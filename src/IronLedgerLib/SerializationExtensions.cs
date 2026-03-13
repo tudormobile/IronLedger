@@ -5,6 +5,9 @@ namespace Tudormobile.IronLedgerLib;
 /// </summary>
 public static class SerializationExtensions
 {
+    // Shared default instance avoids allocating a new serializer on every extension method call.
+    private static readonly IIronLedgerSerializer DefaultSerializer = new Serialization.IronLedgerJsonSerializer();
+
     /// <summary>
     /// Serializes an <see cref="AssetId"/> to a string using the specified serializer.
     /// </summary>
@@ -12,10 +15,7 @@ public static class SerializationExtensions
     /// <param name="serializer">The serializer to use. If null, uses the default JSON serializer.</param>
     /// <returns>A string representation of the asset ID.</returns>
     public static string Serialize(this AssetId assetId, IIronLedgerSerializer? serializer = null)
-    {
-        serializer ??= new Serialization.IronLedgerJsonSerializer();
-        return serializer.Serialize(assetId);
-    }
+        => (serializer ?? DefaultSerializer).Serialize(assetId);
 
     /// <summary>
     /// Serializes a <see cref="ComponentData"/> to a string using the specified serializer.
@@ -24,10 +24,7 @@ public static class SerializationExtensions
     /// <param name="serializer">The serializer to use. If null, uses the default JSON serializer.</param>
     /// <returns>A string representation of the component data.</returns>
     public static string Serialize(this ComponentData componentData, IIronLedgerSerializer? serializer = null)
-    {
-        serializer ??= new Serialization.IronLedgerJsonSerializer();
-        return serializer.Serialize(componentData);
-    }
+        => (serializer ?? DefaultSerializer).Serialize(componentData);
 
     /// <summary>
     /// Serializes a <see cref="SystemComponentData"/> to a string using the specified serializer.
@@ -36,10 +33,7 @@ public static class SerializationExtensions
     /// <param name="serializer">The serializer to use. If null, uses the default JSON serializer.</param>
     /// <returns>A string representation of the system component data.</returns>
     public static string Serialize(this SystemComponentData systemComponentData, IIronLedgerSerializer? serializer = null)
-    {
-        serializer ??= new Serialization.IronLedgerJsonSerializer();
-        return serializer.Serialize(systemComponentData);
-    }
+        => (serializer ?? DefaultSerializer).Serialize(systemComponentData);
 
     /// <summary>
     /// Deserializes a string to an <see cref="AssetId"/> using the specified serializer.
@@ -48,10 +42,7 @@ public static class SerializationExtensions
     /// <param name="serializer">The serializer to use. If null, uses the default JSON serializer.</param>
     /// <returns>The deserialized asset ID, or null if deserialization fails.</returns>
     public static AssetId? DeserializeAssetId(this string data, IIronLedgerSerializer? serializer = null)
-    {
-        serializer ??= new Serialization.IronLedgerJsonSerializer();
-        return serializer.Deserialize<AssetId>(data);
-    }
+        => (serializer ?? DefaultSerializer).Deserialize<AssetId>(data);
 
     /// <summary>
     /// Deserializes a string to a <see cref="ComponentData"/> using the specified serializer.
@@ -60,10 +51,7 @@ public static class SerializationExtensions
     /// <param name="serializer">The serializer to use. If null, uses the default JSON serializer.</param>
     /// <returns>The deserialized component data, or null if deserialization fails.</returns>
     public static ComponentData? DeserializeComponentData(this string data, IIronLedgerSerializer? serializer = null)
-    {
-        serializer ??= new Serialization.IronLedgerJsonSerializer();
-        return serializer.Deserialize<ComponentData>(data);
-    }
+        => (serializer ?? DefaultSerializer).Deserialize<ComponentData>(data);
 
     /// <summary>
     /// Deserializes a string to a <see cref="SystemComponentData"/> using the specified serializer.
@@ -72,8 +60,5 @@ public static class SerializationExtensions
     /// <param name="serializer">The serializer to use. If null, uses the default JSON serializer.</param>
     /// <returns>The deserialized system component data, or null if deserialization fails.</returns>
     public static SystemComponentData? DeserializeSystemComponentData(this string data, IIronLedgerSerializer? serializer = null)
-    {
-        serializer ??= new Serialization.IronLedgerJsonSerializer();
-        return serializer.Deserialize<SystemComponentData>(data);
-    }
+        => (serializer ?? DefaultSerializer).Deserialize<SystemComponentData>(data);
 }

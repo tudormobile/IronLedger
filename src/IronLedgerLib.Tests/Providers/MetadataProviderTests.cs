@@ -3,6 +3,7 @@ using Tudormobile.IronLedgerLib.Providers;
 namespace IronLedgerLib.Tests.Providers;
 
 [TestClass]
+[TestCategory("Integration")]
 public class MetadataProviderTests
 {
     [TestMethod]

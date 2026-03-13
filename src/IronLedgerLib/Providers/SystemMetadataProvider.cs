@@ -11,7 +11,7 @@ internal class SystemMetadataProvider : CimMetadataProviderBase
     protected override string WmiClassName => "Win32_ComputerSystem";
 
     /// <inheritdoc/>
-    protected override string Properties => "Name, Manufacturer, Model, TotalPhysicalMemory";
+    protected override string Properties => "Manufacturer, Model";
 
     /// <inheritdoc/>
     protected override (string? SerialNumber, string? Manufacturer, string? Product) ExtractMetadata(CimInstance instance)

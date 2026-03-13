@@ -5,11 +5,14 @@ namespace Tudormobile.IronLedgerLib.Providers;
 /// </summary>
 internal class MemoryDataProvider : CimDataProviderBase
 {
+    /// <inheritdoc/>
     protected override string WmiClassName => "Win32_PhysicalMemory";
 
+    /// <inheritdoc/>
     protected override string CaptionProperty => "Caption";
 
     // Easy to maintain: just add or remove property names from this list
+    /// <inheritdoc/>
     protected override string[] ComponentPropertyNames =>
     [
         "PartNumber",
@@ -19,16 +22,3 @@ internal class MemoryDataProvider : CimDataProviderBase
         "Speed",
     ];
 }
-/* Usage Example:
-var memoryProvider = new MemoryDataProvider();
-var memoryModules = memoryProvider.GetData();
-
-foreach (var module in memoryModules)
-{
-    Console.WriteLine($"Caption: {module.Caption}");
-    foreach (var prop in module.Properties)
-    {
-        Console.WriteLine($"  {prop.Name}: {prop.Value}");
-    }
-}
-*/

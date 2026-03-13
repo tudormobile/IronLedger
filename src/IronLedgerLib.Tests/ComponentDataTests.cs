@@ -233,4 +233,173 @@ public class ComponentDataTests
         Assert.AreEqual("Status", componentData.Properties[3].Name);
         Assert.AreEqual("Active", componentData.Properties[3].Value);
     }
+
+    // --- Equals ---
+
+    [TestMethod]
+    public void Equals_WithSameInstance_ReturnsTrue()
+    {
+        var data = new ComponentData { Metadata = AssetMetadata.Empty, Caption = "CPU", Properties = [] };
+
+        Assert.IsTrue(data.Equals(data));
+    }
+
+    [TestMethod]
+    public void Equals_WithNull_ReturnsFalse()
+    {
+        var data = new ComponentData { Metadata = AssetMetadata.Empty, Caption = "CPU", Properties = [] };
+
+        Assert.IsFalse(data.Equals(null));
+    }
+
+    [TestMethod]
+    public void Equals_WithIdenticalPropertiesInSeparateLists_ReturnsTrue()
+    {
+        // This is the key scenario the override exists for: two distinct list instances
+        // with identical elements must compare as equal.
+        var metadata = new AssetMetadata { SerialNumber = "SN1", Manufacturer = "Dell", Product = "XPS" };
+
+        var a = new ComponentData { Metadata = metadata, Caption = "CPU", Properties = [new("Speed", "3.5 GHz"), new("Cores", "8")] };
+        var b = new ComponentData { Metadata = metadata, Caption = "CPU", Properties = [new("Speed", "3.5 GHz"), new("Cores", "8")] };
+
+        Assert.IsTrue(a.Equals(b));
+        Assert.AreEqual(a, b);
+    }
+
+    [TestMethod]
+    public void Equals_WithDifferentCaption_ReturnsFalse()
+    {
+        var a = new ComponentData { Metadata = AssetMetadata.Empty, Caption = "CPU", Properties = [] };
+        var b = new ComponentData { Metadata = AssetMetadata.Empty, Caption = "GPU", Properties = [] };
+
+        Assert.IsFalse(a.Equals(b));
+    }
+
+    [TestMethod]
+    public void Equals_WithDifferentMetadata_ReturnsFalse()
+    {
+        var a = new ComponentData
+        {
+            Metadata = new AssetMetadata { SerialNumber = "SN1", Manufacturer = "Dell", Product = "XPS" },
+            Caption = "CPU",
+            Properties = []
+        };
+        var b = new ComponentData
+        {
+            Metadata = new AssetMetadata { SerialNumber = "SN2", Manufacturer = "Dell", Product = "XPS" },
+            Caption = "CPU",
+            Properties = []
+        };
+
+        Assert.IsFalse(a.Equals(b));
+    }
+
+    [TestMethod]
+    public void Equals_WithDifferentPropertyValues_ReturnsFalse()
+    {
+        var a = new ComponentData { Metadata = AssetMetadata.Empty, Caption = "CPU", Properties = [new("Speed", "3.5 GHz")] };
+        var b = new ComponentData { Metadata = AssetMetadata.Empty, Caption = "CPU", Properties = [new("Speed", "4.0 GHz")] };
+
+        Assert.IsFalse(a.Equals(b));
+    }
+
+    [TestMethod]
+    public void Equals_WithPropertiesInDifferentOrder_ReturnsFalse()
+    {
+        // SequenceEqual is order-sensitive; swapped order must not be equal.
+        var a = new ComponentData { Metadata = AssetMetadata.Empty, Caption = "CPU", Properties = [new("Speed", "3.5 GHz"), new("Cores", "8")] };
+        var b = new ComponentData { Metadata = AssetMetadata.Empty, Caption = "CPU", Properties = [new("Cores", "8"), new("Speed", "3.5 GHz")] };
+
+        Assert.IsFalse(a.Equals(b));
+    }
+
+    [TestMethod]
+    public void Equals_WithDifferentPropertyCount_ReturnsFalse()
+    {
+        var a = new ComponentData { Metadata = AssetMetadata.Empty, Caption = "CPU", Properties = [new("Speed", "3.5 GHz")] };
+        var b = new ComponentData { Metadata = AssetMetadata.Empty, Caption = "CPU", Properties = [] };
+
+        Assert.IsFalse(a.Equals(b));
+    }
+
+    [TestMethod]
+    public void Equals_TwoEmptyInstances_ReturnsTrue()
+    {
+        Assert.IsTrue(ComponentData.Empty.Equals(ComponentData.Empty));
+        Assert.AreEqual(ComponentData.Empty, ComponentData.Empty);
+    }
+
+    [TestMethod]
+    public void EqualityOperator_WithIdenticalSeparateLists_ReturnsTrue()
+    {
+        var metadata = AssetMetadata.Empty;
+        var a = new ComponentData { Metadata = metadata, Caption = "CPU", Properties = [new("Speed", "3.5 GHz")] };
+        var b = new ComponentData { Metadata = metadata, Caption = "CPU", Properties = [new("Speed", "3.5 GHz")] };
+
+        Assert.IsTrue(a == b);
+        Assert.IsFalse(a != b);
+    }
+
+    // --- GetHashCode ---
+
+    [TestMethod]
+    public void GetHashCode_IsConsistentForSameInstance()
+    {
+        var data = new ComponentData
+        {
+            Metadata = AssetMetadata.Empty,
+            Caption = "CPU",
+            Properties = [new("Speed", "3.5 GHz")]
+        };
+
+        Assert.AreEqual(data.GetHashCode(), data.GetHashCode());
+    }
+
+    [TestMethod]
+    public void GetHashCode_IsSameForEqualInstances()
+    {
+        var metadata = new AssetMetadata { SerialNumber = "SN1", Manufacturer = "Dell", Product = "XPS" };
+
+        var a = new ComponentData { Metadata = metadata, Caption = "CPU", Properties = [new("Speed", "3.5 GHz")] };
+        var b = new ComponentData { Metadata = metadata, Caption = "CPU", Properties = [new("Speed", "3.5 GHz")] };
+
+        Assert.AreEqual(a.GetHashCode(), b.GetHashCode());
+    }
+
+    [TestMethod]
+    public void GetHashCode_DiffersForDifferentCaption()
+    {
+        var a = new ComponentData { Metadata = AssetMetadata.Empty, Caption = "CPU", Properties = [] };
+        var b = new ComponentData { Metadata = AssetMetadata.Empty, Caption = "GPU", Properties = [] };
+
+        Assert.AreNotEqual(a.GetHashCode(), b.GetHashCode());
+    }
+
+    [TestMethod]
+    public void GetHashCode_DiffersForDifferentProperties()
+    {
+        var a = new ComponentData { Metadata = AssetMetadata.Empty, Caption = "CPU", Properties = [new("Speed", "3.5 GHz")] };
+        var b = new ComponentData { Metadata = AssetMetadata.Empty, Caption = "CPU", Properties = [new("Speed", "4.0 GHz")] };
+
+        Assert.AreNotEqual(a.GetHashCode(), b.GetHashCode());
+    }
+
+    [TestMethod]
+    public void GetHashCode_DiffersForDifferentMetadata()
+    {
+        var a = new ComponentData
+        {
+            Metadata = new AssetMetadata { SerialNumber = "SN1", Manufacturer = "Dell", Product = "XPS" },
+            Caption = "CPU",
+            Properties = []
+        };
+        var b = new ComponentData
+        {
+            Metadata = new AssetMetadata { SerialNumber = "SN2", Manufacturer = "Dell", Product = "XPS" },
+            Caption = "CPU",
+            Properties = []
+        };
+
+        Assert.AreNotEqual(a.GetHashCode(), b.GetHashCode());
+    }
 }

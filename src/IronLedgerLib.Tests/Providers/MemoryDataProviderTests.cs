@@ -3,6 +3,7 @@
 namespace IronLedgerLib.Tests.Providers;
 
 [TestClass]
+[TestCategory("Integration")]
 public class MemoryDataProviderTests
 {
     [TestMethod]

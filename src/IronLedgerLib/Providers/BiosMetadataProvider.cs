@@ -21,6 +21,11 @@ internal class BiosMetadataProvider : CimMetadataProviderBase
         var version = GetPropertyValue(instance, "Version");
         var name = GetPropertyValue(instance, "Name");
 
-        return (serialNumber, manufacturer, $"{name}{version}");
+        // Join non-empty parts with a space to avoid malformed strings like "NameVersion"
+        var productParts = new[] { name, version }
+            .Where(s => !string.IsNullOrEmpty(s));
+        var product = string.Join(" ", productParts);
+
+        return (serialNumber, manufacturer, product);
     }
 }

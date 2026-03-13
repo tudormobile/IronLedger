@@ -6,6 +6,8 @@ namespace IronLedgerLib.Tests.Providers;
 [TestClass]
 public class CimMetadataProviderBaseTests
 {
+    // TestProvider overrides QueryRawMetadata() to return controlled values without
+    // making any real WMI call, isolating the null-to-empty coercion logic in GetMetadata().
     [TestMethod]
     public void GetMetadata_ConvertsNullSerialNumberToEmpty()
     {
@@ -66,10 +68,6 @@ public class CimMetadataProviderBaseTests
         Assert.AreEqual(string.Empty, metadata.Product);
     }
 
-    /// <summary>
-    /// Test provider that returns controlled tuple values using a real WMI class.
-    /// Uses Win32_OperatingSystem which always has exactly one instance.
-    /// </summary>
     private class TestProvider : CimMetadataProviderBase
     {
         private readonly string? _serialNumber;
@@ -83,13 +81,14 @@ public class CimMetadataProviderBaseTests
             _product = product;
         }
 
-        protected override string WmiClassName => "Win32_OperatingSystem";
-        protected override string Properties => "Caption";
+        protected override string WmiClassName => string.Empty;
+        protected override string Properties => string.Empty;
+
+        protected override (string? SerialNumber, string? Manufacturer, string? Product)? QueryRawMetadata()
+            => (_serialNumber, _manufacturer, _product);
 
         protected override (string? SerialNumber, string? Manufacturer, string? Product) ExtractMetadata(CimInstance instance)
-        {
-            return (_serialNumber, _manufacturer, _product);
-        }
+            => throw new NotImplementedException();
     }
 
 }

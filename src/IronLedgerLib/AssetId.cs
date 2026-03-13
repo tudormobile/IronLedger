@@ -5,7 +5,6 @@
 /// </summary>
 public record AssetId
 {
-    [field: NonSerialized]
     private string? _idCache;
 
     /// <summary>
@@ -31,8 +30,23 @@ public record AssetId
     /// The ID is generated using SHA256 hash of all metadata properties,
     /// ensuring consistency across multiple instantiations with the same data.
     /// The hash is computed lazily on first access and cached for subsequent calls.
+    /// The cache is intentionally excluded from <see langword="with"/> expression copies
+    /// so that modified instances always compute a fresh ID from their own metadata.
     /// </remarks>
     public string Id => _idCache ??= ComputeId();
+
+    /// <summary>
+    /// Copy constructor invoked by <see langword="with"/> expressions.
+    /// Intentionally excludes <c>_idCache</c> so that modified copies always
+    /// compute a fresh identifier from their own metadata.
+    /// </summary>
+    /// <param name="original">The original instance to copy properties from.</param>
+    protected AssetId(AssetId original)
+    {
+        SystemMetadata = original.SystemMetadata;
+        BaseBoardMetadata = original.BaseBoardMetadata;
+        BiosMetadata = original.BiosMetadata;
+    }
 
     /// <summary>
     /// Returns the unique identifier for this asset.
@@ -42,8 +56,6 @@ public record AssetId
 
     private string ComputeId()
     {
-        using var sha256 = System.Security.Cryptography.SHA256.Create();
-
         // Combine all metadata into a single string using pipe delimiter
         var input = string.Join("|",
             SystemMetadata.SerialNumber,
@@ -57,7 +69,8 @@ public record AssetId
             BiosMetadata.Product
         );
 
-        var hashBytes = sha256.ComputeHash(System.Text.Encoding.UTF8.GetBytes(input));
+        var hashBytes = System.Security.Cryptography.SHA256.HashData(
+            System.Text.Encoding.UTF8.GetBytes(input));
         return Convert.ToHexStringLower(hashBytes);
     }
 }
