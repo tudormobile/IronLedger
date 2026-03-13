@@ -236,7 +236,7 @@ var baseboardInfo = assetId.BaseBoardMetadata;
 var biosInfo = assetId.BiosMetadata;
 
 // Get unique identifier
-string uniqueId = assetId.UniqueId;
+string uniqueId = assetId.Id;
 Console.WriteLine($"Hardware Fingerprint: {uniqueId}");
 
 // Modify using with expressions (creates new instance)
