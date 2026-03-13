@@ -57,7 +57,7 @@ using Tudormobile.IronLedgerLib;
 var factory = new AssetIdFactory();
 var assetId = factory.Create();
 
-Console.WriteLine($"Asset ID: {assetId.UniqueId}");
+Console.WriteLine($"Asset ID: {assetId.Id}");
 Console.WriteLine($"System: {assetId.SystemMetadata.Manufacturer} {assetId.SystemMetadata.Product}");
 Console.WriteLine($"Serial: {assetId.SystemMetadata.SerialNumber}");
 ```
