@@ -114,7 +114,7 @@ var restored = serializer.Deserialize<AssetId>(json);
 
 // Extension methods for convenience
 string jsonData = assetId.Serialize();
-var restoredAsset = jsonData.Deserialize<AssetId>();
+var restoredAsset = jsonData.DeserializeAssetId();
 ```
 
 ## ✨ Key Features
