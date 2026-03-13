@@ -1,7 +1,7 @@
 # IronLedger
 
 [![NuGet](https://img.shields.io/nuget/v/Tudormobile.IronLedgerLib.svg)](https://www.nuget.org/packages/Tudormobile.IronLedgerLib/)
-[![License](https://img.shields.io/github/license/tudormobile/IronLedger)](https://github.com/tudormobile/IronLedger/blob/main/LICENSE)
+[![License](https://img.shields.io/github/license/tudormobile/IronLedger)](https://github.com/tudormobile/IronLedger/blob/main/LICENSE.txt)
 [![.NET](https://img.shields.io/badge/.NET-10.0-blue.svg)](https://dotnet.microsoft.com/download)
 
 **IronLedger** is a comprehensive .NET library for hardware asset identification and inventory management. It provides a robust framework for collecting, serializing, and managing hardware component data across your infrastructure.
