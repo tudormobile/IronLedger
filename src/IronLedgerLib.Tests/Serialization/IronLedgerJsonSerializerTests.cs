@@ -269,7 +269,7 @@ public class IronLedgerJsonSerializerTests
         var serializer = new IronLedgerJsonSerializer();
 
         // Act & Assert
-        Assert.ThrowsExactly<ArgumentException>(() => serializer.Deserialize<AssetId>(null!));
+        Assert.ThrowsExactly<ArgumentNullException>(() => serializer.Deserialize<AssetId>(null!));
     }
 
     [TestMethod]

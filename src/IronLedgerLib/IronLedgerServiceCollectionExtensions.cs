@@ -1,4 +1,3 @@
-using System;
 using Microsoft.Extensions.Logging;
 using Tudormobile.IronLedgerLib;
 using Tudormobile.IronLedgerLib.Serialization;
@@ -20,10 +19,7 @@ public static class IronLedgerServiceCollectionExtensions
         this IServiceCollection services,
         Action<IronLedgerOptions>? configure = null)
     {
-        if (services is null)
-        {
-            throw new ArgumentNullException(nameof(services));
-        }
+        ArgumentNullException.ThrowIfNull(services, nameof(services));
 
         var options = new IronLedgerOptions();
         configure?.Invoke(options);
