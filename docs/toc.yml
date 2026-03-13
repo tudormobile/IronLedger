@@ -2,8 +2,10 @@
   href: introduction.md
 - name: Project Overview
   href: project-overview.md
+- name: Exception Handling
+  href: exception-handling.md
 - name: Serialization
-  href: asset-serialization.md
+  href: serialization.md
 - name: Tools
   href: tools.md
 - name: API Documentation

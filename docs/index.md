@@ -9,9 +9,10 @@ _layout: landing
 
 - **[Introduction](introduction.md)** - Architecture overview and roadmap  
 - **[Project Overview](project-overview.md)** - Overview of the project features and goals  
-- **[Serialization](asset-serialization.md)** - Serialization abstraction and default Json serialization  
+- **[Exception Handling](exception-handling.md)** - Exception handling strategy and best practices  
+- **[Serialization](serialization.md)** - Serialization abstraction and default Json serialization  
 - **[Tools](tools.md)** - Reference documentation for utilities in the `tools/` folder  
-- **[Generated API Docs](api/Tudormobile.md)** - Auto-generated technical reference  
+- **[Generated API Docs](api/Tudormobile.md)** - Auto-generated technical reference
 
 ## 🚀 Quick Start
 

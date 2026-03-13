@@ -35,6 +35,7 @@ public class ComponentDataFactory
     /// Creates a new <see cref="SystemComponentData"/> by collecting data from all configured providers.
     /// </summary>
     /// <returns>A new <see cref="SystemComponentData"/> instance populated with data from all hardware components.</returns>
+    /// <exception cref="ComponentDataProviderException">Thrown when any of the configured providers fail to retrieve data.</exception>
     public SystemComponentData Create()
     {
         var systems = _systemProvider.GetData();
@@ -51,6 +52,7 @@ public class ComponentDataFactory
     /// Gets processor component data.
     /// </summary>
     /// <returns>A collection of processor component data.</returns>
+    /// <exception cref="ComponentDataProviderException">Thrown when the processor provider fails to retrieve data.</exception>
     public IReadOnlyList<ComponentData> GetProcessors()
         => _processorProvider.GetData();
 
@@ -58,6 +60,7 @@ public class ComponentDataFactory
     /// Gets system component data.
     /// </summary>
     /// <returns>System component data.</returns>
+    /// <exception cref="ComponentDataProviderException">Thrown when the system provider fails to retrieve data.</exception>
     public ComponentData GetSystem()
     {
         var data = _systemProvider.GetData();
@@ -70,6 +73,7 @@ public class ComponentDataFactory
     /// Gets memory component data.
     /// </summary>
     /// <returns>A collection of memory component data.</returns>
+    /// <exception cref="ComponentDataProviderException">Thrown when the memory provider fails to retrieve data.</exception>
     public IReadOnlyList<ComponentData> GetMemory()
         => _memoryProvider.GetData();
 
@@ -77,6 +81,7 @@ public class ComponentDataFactory
     /// Gets disk component data.
     /// </summary>
     /// <returns>A collection of disk component data.</returns>
+    /// <exception cref="ComponentDataProviderException">Thrown when the disk provider fails to retrieve data.</exception>
     public IReadOnlyList<ComponentData> GetDisks()
         => _diskProvider.GetData();
 }

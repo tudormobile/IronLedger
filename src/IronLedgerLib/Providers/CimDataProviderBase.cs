@@ -33,39 +33,53 @@ internal abstract class CimDataProviderBase : IComponentDataProvider
     protected virtual bool HasSerialNumber => true;
 
     /// <inheritdoc/>
+    /// <exception cref="ComponentDataProviderException">Thrown when WMI/CIM query fails or data retrieval encounters an error.</exception>
     public IReadOnlyList<ComponentData> GetData()
     {
-        using var session = CimSession.Create(null);
-
-        // Build the property list for the SELECT query
-        var metadataProps = HasSerialNumber
-            ? ["SerialNumber", "Manufacturer"]
-            : new[] { "Manufacturer" };
-        var allProperties = metadataProps
-            .Concat(new[] { CaptionProperty })
-            .Concat(ComponentPropertyNames)
-            .Distinct()
-            .ToArray();
-
-        var query = $"SELECT {string.Join(", ", allProperties)} FROM {WmiClassName}";
-        var instances = session.QueryInstances(@"root\cimv2", "WQL", query);
-
-        var results = new List<ComponentData>();
-        foreach (var instance in instances)
+        try
         {
-            var metadata = ExtractMetadata(instance);
-            var caption = GetPropertyValue(instance, CaptionProperty) ?? string.Empty;
-            var properties = ExtractComponentProperties(instance);
+            using var session = CimSession.Create(null);
 
-            results.Add(new ComponentData
+            // Build the property list for the SELECT query
+            var metadataProps = HasSerialNumber
+                ? ["SerialNumber", "Manufacturer"]
+                : new[] { "Manufacturer" };
+            var allProperties = metadataProps
+                .Concat(new[] { CaptionProperty })
+                .Concat(ComponentPropertyNames)
+                .Distinct()
+                .ToArray();
+
+            var query = $"SELECT {string.Join(", ", allProperties)} FROM {WmiClassName}";
+            var instances = session.QueryInstances(@"root\cimv2", "WQL", query);
+
+            var results = new List<ComponentData>();
+            foreach (var instance in instances)
             {
-                Metadata = metadata,
-                Caption = caption,
-                Properties = properties
-            });
-        }
+                var metadata = ExtractMetadata(instance);
+                var caption = GetPropertyValue(instance, CaptionProperty) ?? string.Empty;
+                var properties = ExtractComponentProperties(instance);
 
-        return results;
+                results.Add(new ComponentData
+                {
+                    Metadata = metadata,
+                    Caption = caption,
+                    Properties = properties
+                });
+            }
+
+            return results;
+        }
+        catch (Exception ex) when (ex is not ComponentDataProviderException)
+        {
+            throw new ComponentDataProviderException(
+                $"Failed to retrieve data from WMI class '{WmiClassName}'.",
+                ex)
+            {
+                ProviderName = GetType().Name,
+                WmiClassName = WmiClassName
+            };
+        }
     }
 
     /// <summary>
