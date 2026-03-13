@@ -29,7 +29,7 @@ using Tudormobile.IronLedgerLib;
 var factory = new AssetIdFactory();
 var assetId = factory.Create();
 
-Console.WriteLine(assetId.UniqueId);
+Console.WriteLine(assetId.Id);
 ```
 
 ## Repository Layout
