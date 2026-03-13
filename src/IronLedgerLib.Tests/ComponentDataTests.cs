@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace IronLedgerLib.Tests;
 
 [TestClass]
@@ -330,6 +332,18 @@ public class ComponentDataTests
     }
 
     [TestMethod]
+    public void Equals_WithDerivedType_SameData_ReturnsFalse()
+    {
+        // Even when all data is identical, a derived record must not equal the base type.
+        // This exercises the GetType() != other.GetType() guard in Equals.
+        var metadata = new AssetMetadata { SerialNumber = "SN1", Manufacturer = "Dell", Product = "XPS" };
+        var baseInstance = new ComponentData { Metadata = metadata, Caption = "CPU", Properties = [] };
+        var derivedInstance = new DerivedComponentData { Metadata = metadata, Caption = "CPU", Properties = [] };
+
+        Assert.IsFalse(baseInstance.Equals(derivedInstance));
+    }
+
+    [TestMethod]
     public void EqualityOperator_WithIdenticalSeparateLists_ReturnsTrue()
     {
         var metadata = AssetMetadata.Empty;
@@ -402,4 +416,7 @@ public class ComponentDataTests
 
         Assert.AreNotEqual(a.GetHashCode(), b.GetHashCode());
     }
+
+    [ExcludeFromCodeCoverage]
+    private record DerivedComponentData : ComponentData { }
 }

@@ -36,18 +36,14 @@ public class IronLedgerJsonSerializer : IIronLedgerSerializer
     /// <inheritdoc/>
     public string Serialize<T>(T value)
     {
-        if (value == null)
-            throw new ArgumentNullException(nameof(value));
-
+        ArgumentNullException.ThrowIfNull(value, nameof(value));
         return JsonSerializer.Serialize(value, _options);
     }
 
     /// <inheritdoc/>
     public T? Deserialize<T>(string data)
     {
-        if (string.IsNullOrWhiteSpace(data))
-            throw new ArgumentException("Data cannot be null or whitespace.", nameof(data));
-
+        ArgumentException.ThrowIfNullOrWhiteSpace(data, nameof(data));
         return JsonSerializer.Deserialize<T>(data, _options);
     }
 
