@@ -5,14 +5,16 @@ namespace Tudormobile.IronLedgerLib.Providers;
 /// </summary>
 internal class ProcessorDataProvider : CimDataProviderBase
 {
+    /// <inheritdoc/>
     protected override string WmiClassName => "Win32_Processor";
 
+    /// <inheritdoc/>
     protected override string CaptionProperty => "Name";
 
     // Easy to maintain: just add or remove property names from this list
+    /// <inheritdoc/>
     protected override string[] ComponentPropertyNames =>
     [
-        "Name",
         "Description",
         "Version",
         "DeviceID",

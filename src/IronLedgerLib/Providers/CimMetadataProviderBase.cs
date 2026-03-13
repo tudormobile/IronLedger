@@ -23,21 +23,15 @@ internal abstract class CimMetadataProviderBase : IAssetMetadataProvider
     {
         try
         {
-            using var session = CimSession.Create(null);
-            var query = $"SELECT {Properties} FROM {WmiClassName}";
-            var instances = session.QueryInstances(@"root\cimv2", "WQL", query);
-
-            foreach (var instance in instances)
+            var raw = QueryRawMetadata();
+            if (raw is null) return AssetMetadata.Empty;
+            var (serialNumber, manufacturer, product) = raw.Value;
+            return new AssetMetadata
             {
-                var (serialNumber, manufacturer, product) = ExtractMetadata(instance);
-                return new AssetMetadata
-                {
-                    SerialNumber = serialNumber ?? string.Empty,
-                    Manufacturer = manufacturer ?? string.Empty,
-                    Product = product ?? string.Empty
-                };
-            }
-            return AssetMetadata.Empty;
+                SerialNumber = serialNumber ?? string.Empty,
+                Manufacturer = manufacturer ?? string.Empty,
+                Product = product ?? string.Empty
+            };
         }
         catch (Exception ex) when (ex is not ComponentDataProviderException)
         {
@@ -49,6 +43,19 @@ internal abstract class CimMetadataProviderBase : IAssetMetadataProvider
                 WmiClassName = WmiClassName
             };
         }
+    }
+
+    /// <summary>
+    /// Queries WMI and returns the raw extracted metadata tuple, or <see langword="null"/> if no instance was found.
+    /// Override in tests to bypass the WMI call.
+    /// </summary>
+    protected virtual (string? SerialNumber, string? Manufacturer, string? Product)? QueryRawMetadata()
+    {
+        using var session = CimSession.Create(null);
+        var query = $"SELECT {Properties} FROM {WmiClassName}";
+        foreach (var instance in session.QueryInstances(@"root\cimv2", "WQL", query))
+            return ExtractMetadata(instance);
+        return null;
     }
 
     /// <summary>

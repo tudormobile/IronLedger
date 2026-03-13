@@ -27,9 +27,11 @@ internal abstract class CimDataProviderBase : IComponentDataProvider
     /// <summary>
     /// Gets a value indicating whether the object is expected to have a serial number associated with it.
     /// </summary>
-    /// <remarks>This property always returns <see langword="true"/>, indicating that derived objects are
-    /// expected to support serial numbers. Override this property in a derived class if serial numbers are not
-    /// applicable.</remarks>
+    /// <remarks>
+    /// The default implementation returns <see langword="true"/>. Override this property in a derived class
+    /// and return <see langword="false"/> when serial numbers are not applicable for the WMI class being queried
+    /// (for example, <c>Win32_ComputerSystem</c> does not expose a serial number).
+    /// </remarks>
     protected virtual bool HasSerialNumber => true;
 
     /// <inheritdoc/>
