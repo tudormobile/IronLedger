@@ -8,7 +8,7 @@ namespace IronLedgerLib.Tests.Providers;
 public class CimMetadataProviderBaseTests
 {
     [TestMethod]
-    public void CimMetadaProviderBaseTests_WhenMetadataIsNull_ReturnsEmpty()
+    public void CimMetadataProviderBaseTests_WhenMetadataIsNull_ReturnsEmpty()
     {
         // Arrange
         var provider = new NullProvider();
@@ -21,7 +21,7 @@ public class CimMetadataProviderBaseTests
     }
 
     [TestMethod]
-    public void CimMetadaProviderBaseTests_WhenProviderThrows_ThrowsException()
+    public void CimMetadataProviderBaseTests_WhenProviderThrows_ThrowsException()
     {
         // Arrange
         var provider = new ExceptionProvider();
