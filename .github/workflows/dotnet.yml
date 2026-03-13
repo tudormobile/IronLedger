@@ -140,7 +140,8 @@ jobs:
         RELEASE_TAG: ${{ github.ref_name }}
       run: |
         $zipPath = Join-Path $env:GITHUB_WORKSPACE 'release-zip\package.zip'
-        if (gh release view "$env:RELEASE_TAG" *> $null) {
+        gh release view "$env:RELEASE_TAG" *> $null
+        if ($LASTEXITCODE -eq 0) {
           echo "Release exists. Uploading latest package asset."
           gh release upload "$env:RELEASE_TAG" "$zipPath#package" --clobber
         } else {
