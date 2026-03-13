@@ -18,23 +18,37 @@ internal abstract class CimMetadataProviderBase : IAssetMetadataProvider
     protected abstract string Properties { get; }
 
     /// <inheritdoc/>
+    /// <exception cref="ComponentDataProviderException">Thrown when WMI/CIM query fails or metadata retrieval encounters an error.</exception>
     public AssetMetadata GetMetadata()
     {
-        using var session = CimSession.Create(null);
-        var query = $"SELECT {Properties} FROM {WmiClassName}";
-        var instances = session.QueryInstances(@"root\cimv2", "WQL", query);
-
-        foreach (var instance in instances)
+        try
         {
-            var (serialNumber, manufacturer, product) = ExtractMetadata(instance);
-            return new AssetMetadata
+            using var session = CimSession.Create(null);
+            var query = $"SELECT {Properties} FROM {WmiClassName}";
+            var instances = session.QueryInstances(@"root\cimv2", "WQL", query);
+
+            foreach (var instance in instances)
             {
-                SerialNumber = serialNumber ?? string.Empty,
-                Manufacturer = manufacturer ?? string.Empty,
-                Product = product ?? string.Empty
+                var (serialNumber, manufacturer, product) = ExtractMetadata(instance);
+                return new AssetMetadata
+                {
+                    SerialNumber = serialNumber ?? string.Empty,
+                    Manufacturer = manufacturer ?? string.Empty,
+                    Product = product ?? string.Empty
+                };
+            }
+            return AssetMetadata.Empty;
+        }
+        catch (Exception ex) when (ex is not ComponentDataProviderException)
+        {
+            throw new ComponentDataProviderException(
+                $"Failed to retrieve metadata from WMI class '{WmiClassName}'.",
+                ex)
+            {
+                ProviderName = GetType().Name,
+                WmiClassName = WmiClassName
             };
         }
-        return AssetMetadata.Empty;
     }
 
     /// <summary>

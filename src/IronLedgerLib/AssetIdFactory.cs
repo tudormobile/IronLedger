@@ -31,6 +31,7 @@ public class AssetIdFactory
     /// Creates a new <see cref="AssetId"/> by collecting metadata from all configured providers.
     /// </summary>
     /// <returns>A new <see cref="AssetId"/> instance populated with metadata from system, baseboard, and BIOS.</returns>
+    /// <exception cref="ComponentDataProviderException">Thrown when any of the configured metadata providers fail to retrieve data.</exception>
     public AssetId Create()
     {
         return new AssetId
