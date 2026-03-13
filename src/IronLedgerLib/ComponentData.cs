@@ -50,6 +50,7 @@ public record ComponentData
     {
         if (other is null) return false;
         if (ReferenceEquals(this, other)) return true;
+        if (GetType() != other.GetType()) return false;
         return Metadata == other.Metadata
             && Caption == other.Caption
             && Properties.SequenceEqual(other.Properties);
