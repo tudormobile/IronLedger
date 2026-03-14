@@ -39,7 +39,7 @@ jobs:
       - name: Unit tests
         run: |
           cd src
-          dotnet test --filter "TestCategory!=Integration" --coverage --report-trx
+          dotnet test -c Release --filter "TestCategory!=Integration" --coverage --report-trx
       - name: Unit Test Annotations
         run: |
           cd src
