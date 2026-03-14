@@ -4,7 +4,7 @@ IronLedger is a hardware asset identity and inventory platform that includes a r
 
 The core library, `Tudormobile.IronLedgerLib`, focuses on deterministic asset identification, component discovery, and serialization of collected hardware metadata.
 
-Aditional building blocks are under development:
+Additional building blocks are under development:
 
 - **Web API services** for secure ingestion, query, and lifecycle management workflows.
 - **Web client applications** for operational access to inventory, tracking, and reporting features.
