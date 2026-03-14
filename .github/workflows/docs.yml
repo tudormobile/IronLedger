@@ -35,7 +35,7 @@ jobs:
         env:
           NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-# Unit tests and unit test test annotations are included here because the output is embedded in the documentation. 
+# Unit tests and unit test annotations are included here because the output is embedded in the documentation. 
       - name: Unit tests
         run: |
           cd src
