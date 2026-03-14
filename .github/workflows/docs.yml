@@ -2,13 +2,13 @@ name: Publish Docs
 # Trigger the action on push to main
 on:
   workflow_dispatch:
-#  push:
-#    branches:
-#      - main
+  push:
+    branches:
+      - main
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
-  actions: read
+  contents: read
   pages: write
   id-token: write
   packages: read
@@ -26,35 +26,30 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: windows-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-    - name: Dotnet Setup
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 10.0.x
-      env:
-        NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      - name: Dotnet Setup
+        uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4
+        with:
+          dotnet-version: 10.0.100
+        env:
+          NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    - run: |
-        dotnet tool update -g dotnet-Coverage
-        dotnet tool update -g dotnet-reportgenerator-globaltool
-    - run: |
-        cd src
-        dotnet test --coverage --report-trx --report-trx-filename "output.trx"
-        dotnet build -c Release
-        dotnet-coverage merge **\*.coverage --remove-input-files --output-format xml --output output.xml
-        reportgenerator -reports:"output.xml" -targetdir:"output" -reporttypes:"MarkdownSummaryGithub"
-    - name: Documentation
-      run: |
-        dotnet nuget add source --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github-packages "https://nuget.pkg.github.com/dotnet/index.json"
-        dotnet tool update -g docfx --add-source github-packages --prerelease
-        docfx docs/docfx.json
+      - name: Documentation
+        run: |
+          dotnet nuget add source --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github-packages "https://nuget.pkg.github.com/dotnet/index.json"
+          if (dotnet tool list -g | Select-String '^docfx\s') {
+            dotnet tool update -g docfx --version 2.78.3 --add-source github-packages
+          } else {
+            dotnet tool install -g docfx --version 2.78.3 --add-source github-packages
+          }
+          docfx docs/docfx.json
 
-    - name: Upload artifact
-      uses: actions/upload-pages-artifact@v4
-      with:
-        # Upload entire repository
-        path: 'docs/_site'
-    - name: Deploy to GitHub Pages
-      id: deployment
-      uses: actions/deploy-pages@v4
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4
+        with:
+          # Upload entire repository
+          path: 'docs/_site'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4
