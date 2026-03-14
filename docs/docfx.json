@@ -5,7 +5,7 @@
         {
           "src": "../src",
           "files": [
-            "**IronLedgerLib/bin/release/net10.0/Tudormobile*.dll"
+            "**/IronLedgerLib/bin/Release/net10.0/Tudormobile*.dll"
           ],
           "exclude": [
             "**/*Tests.csproj"
