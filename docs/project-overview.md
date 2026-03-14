@@ -68,7 +68,7 @@ The identifier type used for asset identification is computed from all of the as
 }
 ```
 ### Component Identification
-Conponents are identified by their respective metadata (serial number, manufacturer, and product) in a similar manner to assets, favoring serial numbers where available as a unique identifier while falling back to a hash of the metadata. Component identifiers are not intended to be used as globally unique keys; they only need to be unique for each asset they are associated with, and only for identification purposes even in that case. The exception being components that require secure dispostion/disposal, such as disk drives, which require a serial number to participate in that process.
+Components are identified by their respective metadata (serial number, manufacturer, and product) in a similar manner to assets, favoring serial numbers where available as a unique identifier while falling back to a hash of the metadata. Component identifiers are not intended to be used as globally unique keys; they only need to be unique for each asset they are associated with, and only for identification purposes even in that case. The exception being components that require secure dispostion/disposal, such as disk drives, which require a serial number to participate in that process.
 ```json
 {
   "system": { ... },
