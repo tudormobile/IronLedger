@@ -16,6 +16,7 @@ It is intentionally compact and structured to scale as additional tools are adde
 | Tool | Folder | Status | Primary Purpose |
 | --- | --- | --- | --- |
 | AssetId | `tools/AssetId` | Active | Generates a stable asset identification payload from local hardware metadata. |
+| ComponentList | `tools/ComponentList` | Active | Lists core system component counts and outputs serialized component data JSON. |
 
 ---
 
@@ -52,6 +53,40 @@ dotnet run --project .\tools\AssetId\AssetId.csproj
 ### Notes
 - Current folder/project naming uses `AssetId` (spelling retained to match codebase).
 - Fallback text values are used when metadata cannot be read from CIM queries.
+
+---
+
+## Tool: ComponentList
+
+### Summary
+Console utility that retrieves component inventory data through `IronLedgerLib` and prints a serialized JSON payload.
+
+### Current Scope
+- Retrieves a full component snapshot in one call (`Create`).
+- Prints system caption and count summaries for processors, memory, and disks.
+- Demonstrates targeted retrieval methods (`GetProcessors`, `GetDisks`, `GetSystem`).
+
+### Tech/Dependencies
+- Runtime: .NET `net10.0`
+- Package: `Microsoft.Management.Infrastructure`
+- Project reference: `src/IronLedgerLib`
+- Platform expectation: Windows environment with CIM/WMI availability.
+
+### Run
+From repository root:
+
+```powershell
+dotnet run --project .\tools\ComponentList\ComponentList.csproj
+```
+
+### Output
+- Human-readable summary lines (system caption and component counts).
+- Serialized JSON payload for the full component model.
+- Error message output when component retrieval fails.
+
+### Notes
+- Uses `ComponentDataFactory` directly to exercise both aggregate and targeted retrieval paths.
+- Intended as a quick validation/inspection utility for hardware component collection behavior.
 
 ---
 

@@ -19,6 +19,11 @@ _layout: landing
 ```cs
 using Tudormobile.IronLedgerLib;
 
+// Create an asset ID from system hardware
+var factory = new AssetIdFactory();
+var assetId = factory.Create();
+
+Console.WriteLine($"Asset ID: {assetId.Id}");
 ```
 
 ## 🔧 Build Documentation
