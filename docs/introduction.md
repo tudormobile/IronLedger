@@ -1,6 +1,6 @@
 # Introduction
 
-IronLedger is a hardware asset identity and inventory platform that includes reusable .NET core library that can be used to develop a full end-to-end management system.
+IronLedger is a hardware asset identity and inventory platform that includes a reusable .NET library that can be used to develop a full end-to-end management system.
 
 The core library, `Tudormobile.IronLedgerLib`, focuses on deterministic asset identification, component discovery, and serialization of collected hardware metadata.
 
