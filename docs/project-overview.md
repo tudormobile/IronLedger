@@ -1,5 +1,5 @@
 # IronLedger
-IT Asset Management, tracking, and diposal.
+IT Asset Management, tracking, and disposal.
 
 ## Project Overview
 IronLedger is an integrated hardware management and security platform. It provides a centralized "Single Source of Truth" for an organization's hardware assets, tracking them from initial procurement through internal component changes to secure end-of-life disposal.
@@ -17,7 +17,7 @@ The system utilizes a hybrid model to balance local hardware access with central
 - **Collector**: A series of local software utilities that targets the CIM (Common Information Model) API to extract deep hardware data (Serial Numbers, Disk IDs) with high performance and strong typing.
 - **API Gateway**: A secure REST interface that receives encrypted hardware payloads from collectors.
 - **The Registry (Database)**: A relational data backend that maintains asset histories, component links, and sanitization certificates.
-- **Sanatize**: Local software utilities to securely erase and sanatize to NIST 800-88 standards.
+- **Sanitize**: Local software utilities to securely erase and sanitize to NIST 800-88 standards.
 - **Management Dashboard**: A web-based interface for ITAD (Asset Disposition) reporting and auditing.
 
 ### Database Schema (The Registry)
@@ -32,7 +32,7 @@ The database is structured to support NIST compliance and Component Mobility/Mig
 - `POST /v1/assets/ingest`: Full hardware snapshot submission.
 - `GET /v1/assets/{asset_id}`: Retrieves asset or asset list.
 - `PATCH /v1/assets/{id}/components`: Specific component update (for maintenance).
-#### Sanitaztion and Disposal Endpoints
+#### Sanitization and Disposal Endpoints
 - `POST /v1/disposal/logs`: Submission of sanitization results and certificates.
 - `GET /v1/disposal/pending`: List of assets and components pending disposal.
 - `PUT /v1/assets/{asset_id}/status`: Updates asset state (active/retired/disposed)
@@ -41,33 +41,54 @@ The database is structured to support NIST compliance and Component Mobility/Mig
 Asset identification based on local inspection can be problematic as assets vary in the amount of unique identifying information that can be reliably extracted by software running on the machine. Since the IronLedger system relies on this type of identification, a system of asset identification is used.
 
 #### Asset Metadata
-Assets are identified by a prioritized series of available metadata.
-- **Serial Numbers**. When available, serial numbers are used to identify assets and components.
-- **Device Identifiers**. Used when serial numbers cannot be obtained.
-- **Device Name**. Used when serial numbers or identifiers are unavailable, provided it is unique.
-- **Identifier**. A generated identifier using all available information and guarenteed unique.  
+Assets are identified by a collection of available metadata.
+- **System Metadata**. The serial number, product, and manufacturer of the system.
+- **Baseboard Metadata**. The baseboard (motherboard) serial number, product, and manufacturer.
+- **BIOS Metadata**. The serial number, product, and manufacturer of the BIOS/firmware.
 
-The identifier type used for asset identification will be included in the meta-data of an asset or components, and users may not modify these values during ingest or component modification. All other values may be edited for correctness, completeness, etc. 
+The identifier type used for asset identification is computed from all of the asset metadata listed above. It is still possible for a collision to take place, especially when serial numbers are not available. This must be accounted for in the system architecture typically by presenting the user with the final determination of which specific asset is being identified.
 ```json
 {
-    "id_type": "sn|did|gid",
-    "metadata": {
-        "serial_number": "SN-12345-ABC",
-        "device_id": "BIOS|American Megatrends Inc.|1801|12/25/2022 7:00:00 PM|ALASKA - 1072009",
-        "generated_id": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-        "name" : "ENG-WORKSTATION-04",
-        "manufacturer": "DELL Inc.",
-        "model": "Precision 5570"
-        ...
-    },
-    "components": [
-        { ... },
-        { ... }
-    ]
+  "id": "68e129f573a1758c8ec462e75d0234a30c46c9f8a99359d4c75cfb2a7f0ce4f7",
+  "system_metadata": {
+    "serial_number": "",
+    "manufacturer": "Microsoft Corporation",
+    "product": "Microsoft Surface Laptop, 7th Edition"
+  },
+  "base_board_metadata": {
+    "serial_number": "A12345678909876543",
+    "manufacturer": "Microsoft Corporation",
+    "product": "Microsoft Surface Laptop, 7th Edition"
+  },
+  "bios_metadata": {
+    "serial_number": "F625A3DE625E11",
+    "manufacturer": "Microsoft Corporation",
+    "product": "175.138.235 QCOM   - 8380"
+  }
 }
 ```
 ### Component Identification
-Conponents are identified in a similar manner to assets, favoring serial numbers where available while falling back to prioritized list of available attributes, depending on the specific component type.
+Components are identified by their respective metadata (serial number, manufacturer, and product) in a similar manner to assets, favoring serial numbers where available as a unique identifier while falling back to a hash of the metadata. Component identifiers are not intended to be used as globally unique keys; they only need to be unique for each asset they are associated with, and only for identification purposes even in that case. The exception being components that require secure disposition/disposal, such as disk drives, which require a serial number to participate in that process.
+```json
+{
+  "system": { ... },
+  "disks": [
+    {
+      "metadata": {
+        "serial_number": "E823_8FA6_BF53_0001_001B_448B_405D_F2E0.",
+        "manufacturer": "(Standard disk drives)",
+        "product": "SDDPTQD-1T00-1124-WD"
+      },
+      "caption": "SDDPTQD-1T00-1124-WD",
+      "properties": { ... }
+    },
+    { ... }
+  ],
+  "processors": [ ... ],
+  "memory": [ ... ],
+  ...
+}
+```
 
 > [!NOTE]
 > Refer to the *tools* folder for applications that demonstrate 

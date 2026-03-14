@@ -27,13 +27,38 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - name: Dotnet Setup
-        uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4
+        uses: actions/setup-dotnet@c2fa09f4bde5ebb9d1777cf28262a3eb3db3ced7 # v5.2.0
         with:
           dotnet-version: 10.0.100
         env:
           NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+# Unit tests and unit test annotations are included here because the output is embedded in the documentation. 
+      - name: Unit tests
+        run: |
+          cd src
+          dotnet test -c Release --filter "TestCategory!=Integration" --coverage --report-trx
+      - name: Unit Test Annotations
+        run: |
+          cd src
+          if (dotnet tool list -g | Select-String 'dotnet-coverage') {
+            dotnet tool update -g dotnet-Coverage --version 18.1.0
+          } else {
+            dotnet tool install -g dotnet-Coverage --version 18.1.0
+          }
+          if (dotnet tool list -g | Select-String 'dotnet-reportgenerator-globaltool') {
+            dotnet tool update -g dotnet-reportgenerator-globaltool --version 5.4.3
+          } else {
+            dotnet tool install -g dotnet-reportgenerator-globaltool --version 5.4.3
+          }
+          dotnet-coverage merge **\*.coverage --remove-input-files --output-format xml --output output.xml
+          reportgenerator -reports:"output.xml" -targetdir:"output" -reporttypes:"MarkdownSummaryGithub"
+          echo "### Test Results" >> "$env:GITHUB_STEP_SUMMARY"
+          Get-ChildItem -Recurse -Filter *.trx | ForEach-Object { Get-Content $_.FullName | Select-String 'executed=\"(\d+)\" passed=\"(\d+)\" failed=\"(\d+)\"' | ForEach-Object { ":purple_circle: Tests: " + $_.Matches[0].Groups[1].Value + " :green_circle: Passed: " + $_.Matches[0].Groups[2].Value + " :red_circle: Failed: " + $_.Matches[0].Groups[3].Value } } >> "$env:GITHUB_STEP_SUMMARY"
+          echo "### Code Coverage" >> "$env:GITHUB_STEP_SUMMARY"
+          Get-Content output\SummaryGithub.md | Select-String '<summary>(.+%)</summary>' | ForEach-Object { $_.Matches[0].Groups[1].Value } >> "$env:GITHUB_STEP_SUMMARY"
 
       - name: Documentation
         run: |
