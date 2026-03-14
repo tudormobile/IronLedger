@@ -43,8 +43,8 @@ Asset identification based on local inspection can be problematic as assets vary
 #### Asset Metadata
 Assets are identified by a collection of available metadata.
 - **System Metadata**. The serial number, product, and manufacturer of the system.
-- **Baseboard Metadata**. The motherboard serial number, product, and manufacturer of the system.
-- **Bios Metadata**. The serial number, product, and manufacturer of the system BIOS.
+- **Baseboard Metadata**. The baseboard (motherboard) serial number, product, and manufacturer.
+- **BIOS Metadata**. The serial number, product, and manufacturer of the BIOS/firmware.
 
 The identifier type used for asset identification is computed from all of the asset metadata listed above. It is still possible for a collision to take place, especially when serial numbers are not available. This must be accounted for in the system architecture typically by presenting the user with the final determination of which specific asset is being identified.
 ```json
