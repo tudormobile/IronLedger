@@ -25,7 +25,12 @@ internal sealed class IronLedgerExceptionHandler : IExceptionHandler
 
     public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
     {
-        _logger.LogError(exception, "Unhandled exception in {ServiceName}: {Message}", nameof(IronLedgerService), exception.Message);
+        _logger.LogError(
+            exception,
+            "Unhandled exception handled by {HandlerName} for request {RequestPath}: {Message}",
+            nameof(IronLedgerExceptionHandler),
+            httpContext.Request.Path,
+            exception.Message);
 
         var (statusCode, message) = exception switch
         {
