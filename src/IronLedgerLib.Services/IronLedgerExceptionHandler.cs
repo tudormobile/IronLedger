@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace Tudormobile.IronLedgerLib.Services;
 
 /// <summary>
-/// Global exception handler that catches unhandled exceptions and returns a consistent
-/// <c>{ success, error }</c> JSON envelope with an appropriate HTTP status code.
+/// Global exception handler that catches unhandled exceptions and returns an RFC 7807
+/// <see cref="ProblemDetails"/> response with an appropriate HTTP status code.
 /// </summary>
 internal sealed class IronLedgerExceptionHandler : IExceptionHandler
 {
