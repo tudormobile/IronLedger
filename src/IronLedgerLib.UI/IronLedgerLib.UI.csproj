@@ -26,7 +26,8 @@
     <InternalsVisibleTo Include="$(MSBuildProjectName).Tests" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />  </ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />  
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\IronLedgerLib\IronLedgerLib.csproj" />
   </ItemGroup>

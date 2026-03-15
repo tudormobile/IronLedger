@@ -53,7 +53,7 @@ Or add directly to your `.csproj`:
 ## 🚀 Quick Start
 
 ```csharp
-using Tudormobile.IronLedgerLib;
+using Tudormobile.IronLedgerLib.UI;
 ```
 
 ## ✨ Key Features
