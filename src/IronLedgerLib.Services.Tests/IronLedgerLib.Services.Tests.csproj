@@ -1,0 +1,17 @@
+﻿<Project Sdk="MSTest.Sdk/4.1.0">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IronLedgerLib.Services\IronLedgerLib.Services.csproj" />
+    <Using Include="System.Globalization" />
+    <Using Include="Tudormobile.IronLedgerLib" />
+    <Using Include="Tudormobile.IronLedgerLib.Services" />
+  </ItemGroup>
+</Project>

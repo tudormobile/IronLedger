@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>preview</LangVersion>
+    <AssemblyName>Tudormobile.$(MSBuildProjectName)</AssemblyName>
+    <RootNamespace>Tudormobile.$(MSBuildProjectName)</RootNamespace>
+    <Product>Iron Ledger Library</Product>
+    <Description>UI library for Iron Ledger.</Description>
+    <PackageTags>ironledger ledger inventory ITAD IT asset wipe sanitation</PackageTags>
+    <PackageProjectUrl>https://tudormobile.github.io/IronLedger/</PackageProjectUrl>
+    <PackageReleaseNotes>https://github.com/tudormobile/IronLedger/releases</PackageReleaseNotes>
+    <RepositoryUrl>https://github.com/tudormobile/IronLedger</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <Company>Tudormobile</Company>
+    <Authors>WH Tudor</Authors>
+    <Copyright>Copyright © 2026 Bill Tudor</Copyright>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\" />
+    <InternalsVisibleTo Include="$(MSBuildProjectName).Tests" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />  
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IronLedgerLib\IronLedgerLib.csproj" />
+  </ItemGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+</Project>
