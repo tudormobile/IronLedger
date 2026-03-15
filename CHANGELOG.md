@@ -8,12 +8,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Planned
-- Everything
+- Sample applications
+- Build out services endpoints
+- Refine the CI/CD pipeline
+- Improve documentation
 
-## [0.0.1] - 2026-??-??
+## [0.1.0] - 2026-03-15
 ### Added
 - Initial skeleton an minimal implementation
-
+- Core library
+- Skeleton services library
+- Skeleton UI library
+- Minimal tools and documentation
 ---
 
 ## Links
