@@ -44,7 +44,7 @@ public partial class ObservableAsset : ObservableObject
     /// <param name="assetId">The unique identifier for the asset to be observed.</param>
     /// <param name="systemData">(Optional) The component data representing system-level information for the asset.</param>
     /// <param name="diskData">(Optional) A collection of component data representing disk-related information for the asset.</param>
-    /// <param name="memoryData">Optional) A collection of component data representing memory-related information for the asset.</param>
+    /// <param name="memoryData">(Optional) A collection of component data representing memory-related information for the asset.</param>
     /// <param name="processorData">(Optional) A collection of component data representing processor-related information for the asset.</param>
     public ObservableAsset(AssetId assetId,
         ComponentData? systemData = null,
