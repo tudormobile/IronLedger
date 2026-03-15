@@ -19,6 +19,8 @@ public static class IronLedgerServiceExtensions
         this IServiceCollection services,
         Action<IronLedgerOptions>? configure = null)
     {
+        System.ArgumentNullException.ThrowIfNull(services);
+
         services.AddIronLedger(configure);
         services.AddScoped<IIronLedgerService, IronLedgerService>();
         services.AddExceptionHandler<IronLedgerExceptionHandler>();
@@ -36,6 +38,8 @@ public static class IronLedgerServiceExtensions
     /// <returns>The web application instance with the exception handler middleware added.</returns>
     public static WebApplication UseIronLedgerExceptionHandler(this WebApplication app)
     {
+        System.ArgumentNullException.ThrowIfNull(app);
+
         app.UseExceptionHandler();
         return app;
     }
@@ -51,6 +55,8 @@ public static class IronLedgerServiceExtensions
     /// <returns>The web application instance with the service endpoints mapped.</returns>
     public static WebApplication UseIronLedgerService(this WebApplication app, string prefix = "")
     {
+        System.ArgumentNullException.ThrowIfNull(app);
+
         prefix = prefix.TrimEnd('/');
 
         app.MapGet($"{prefix}/api/v1", async Task<IResult> (
