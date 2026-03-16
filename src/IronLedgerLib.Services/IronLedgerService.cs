@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Text;
 
 namespace Tudormobile.IronLedgerLib.Services;
 
@@ -53,7 +54,7 @@ public class IronLedgerService : IIronLedgerService
     public async Task<IResult> IngestAssetAsync(Stream body, CancellationToken cancellationToken)
     {
         LogApiRequest();
-        using var reader = new StreamReader(body);
+        using var reader = new StreamReader(body, Encoding.UTF8, detectEncodingFromByteOrderMarks: true, bufferSize: 1024, leaveOpen: true);
         var payload = await reader.ReadToEndAsync(cancellationToken);
         var asset = _serializer.Deserialize<AssetId>(payload);
         if (asset is not null)
