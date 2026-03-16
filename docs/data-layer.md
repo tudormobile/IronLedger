@@ -112,7 +112,9 @@ Implement `IAssetRepository` to use a different backing store (e.g., LiteDB, Azu
 public class MyCustomRepository : IAssetRepository
 {
     public Task<IReadOnlyList<AssetRecord>> GetAllAsync(CancellationToken cancellationToken = default) { ... }
+    public Task<IReadOnlyList<string>> GetAllIdentifiersAsync(CancellationToken cancellationToken = default) { ... }
     public Task<AssetRecord?> GetAsync(string assetId, CancellationToken cancellationToken = default) { ... }
+    public Task<bool> Exists(string assetId, CancellationToken cancellationToken = default) { ... }
     public Task SaveAsync(AssetRecord asset, CancellationToken cancellationToken = default) { ... }
     public Task DeleteAsync(string assetId, CancellationToken cancellationToken = default) { ... }
     public Task<string> GetNotesAsync(string assetId, CancellationToken cancellationToken = default) { ... }
