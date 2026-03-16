@@ -14,6 +14,9 @@ public class IronLedgerJsonSerializer : IIronLedgerSerializer
 {
     private readonly JsonSerializerOptions _options;
 
+    /// <inheritdoc/>
+    public string ContentType => "application/json";
+
     /// <summary>
     /// Initializes a new instance of the <see cref="IronLedgerJsonSerializer"/> class
     /// with default options.

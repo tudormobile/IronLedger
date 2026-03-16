@@ -198,4 +198,48 @@ public class FileSystemAssetRepositoryTests
 
         Assert.AreEqual(string.Empty, await _repository.GetNotesAsync(record.Id.Id));
     }
+
+    // --- GetAllIdentifiersAsync ---
+
+    [TestMethod]
+    public async Task GetAllIdentifiersAsync_WhenDirectoryDoesNotExist_ReturnsEmptyList()
+    {
+        var result = await _repository.GetAllIdentifiersAsync();
+
+        Assert.AreEqual(0, result.Count);
+    }
+
+    [TestMethod]
+    public async Task GetAllIdentifiersAsync_AfterSavingTwoRecords_ReturnsBothIds()
+    {
+        var record1 = CreateRecord("SN001");
+        var record2 = CreateRecord("SN002");
+        await _repository.SaveAsync(record1);
+        await _repository.SaveAsync(record2);
+
+        var result = await _repository.GetAllIdentifiersAsync();
+
+        Assert.AreEqual(2, result.Count);
+        Assert.IsTrue(result.Contains(record1.Id.Id));
+        Assert.IsTrue(result.Contains(record2.Id.Id));
+    }
+
+    [TestMethod]
+    public async Task GetAllIdentifiersAsync_SkipsDirectoriesWithoutAssetFile()
+    {
+        Directory.CreateDirectory(Path.Combine(_dataPath, "empty-dir"));
+
+        var result = await _repository.GetAllIdentifiersAsync();
+
+        Assert.AreEqual(0, result.Count);
+    }
+
+    [TestMethod]
+    public async Task GetAllIdentifiersAsync_WhenCancelled_ThrowsOperationCanceledException()
+    {
+        using var cts = new CancellationTokenSource();
+        cts.Cancel();
+
+        await Assert.ThrowsExactlyAsync<TaskCanceledException>(() => _repository.GetAllIdentifiersAsync(cts.Token));
+    }
 }

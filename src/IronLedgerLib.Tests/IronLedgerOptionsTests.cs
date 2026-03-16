@@ -147,6 +147,7 @@ public class IronLedgerOptionsTests
     [ExcludeFromCodeCoverage]
     private class MockSerializer : IIronLedgerSerializer
     {
+        public string ContentType => "application/json";
         public string Serialize<T>(T value) => string.Empty;
         public T? Deserialize<T>(string data) => default;
     }

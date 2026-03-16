@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using System.Diagnostics.CodeAnalysis;
 using Tudormobile.IronLedgerLib.Serialization;
 
 namespace IronLedgerLib.Tests;
@@ -164,6 +165,7 @@ public class IronLedgerServiceCollectionExtensionsTests
         Assert.AreSame(custom, resolved);
     }
 
+    [ExcludeFromCodeCoverage]
     private class MockRepository : IAssetRepository
     {
         public Task<IReadOnlyList<string>> GetAllIdentifiersAsync(CancellationToken cancellationToken = default) => Task.FromResult<IReadOnlyList<string>>([]);
@@ -176,12 +178,15 @@ public class IronLedgerServiceCollectionExtensionsTests
         public Task SaveNotesAsync(string assetId, string markdown, CancellationToken cancellationToken = default) => Task.CompletedTask;
     }
 
+    [ExcludeFromCodeCoverage]
     private class MockSerializer : IIronLedgerSerializer
     {
+        public string ContentType => "application/json";
         public string Serialize<T>(T value) => string.Empty;
         public T? Deserialize<T>(string data) => default;
     }
 
+    [ExcludeFromCodeCoverage]
     private class MockComponentDataProvider : IComponentDataProvider
     {
         private readonly IReadOnlyList<ComponentData> _data;
@@ -207,6 +212,7 @@ public class IronLedgerServiceCollectionExtensionsTests
         public IReadOnlyList<ComponentData> GetData() => _data;
     }
 
+    [ExcludeFromCodeCoverage]
     private class MockMetadataProvider : IAssetMetadataProvider
     {
         private readonly string _serialNumber;

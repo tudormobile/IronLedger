@@ -10,6 +10,11 @@ namespace Tudormobile.IronLedgerLib;
 public interface IIronLedgerSerializer
 {
     /// <summary>
+    /// Gets the MIME content type produced by this serializer (e.g. <c>application/json</c>).
+    /// </summary>
+    string ContentType { get; }
+
+    /// <summary>
     /// Serializes an object to a string representation.
     /// </summary>
     /// <typeparam name="T">The type of object to serialize.</typeparam>

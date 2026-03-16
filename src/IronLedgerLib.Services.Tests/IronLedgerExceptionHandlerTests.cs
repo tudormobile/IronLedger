@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using System.Diagnostics.CodeAnalysis;
 
 namespace IronLedgerLib.Services.Tests;
 
@@ -80,11 +80,13 @@ public class IronLedgerExceptionHandlerTests
         return context;
     }
 
+    [ExcludeFromCodeCoverage]
     private sealed class MockProblemDetailsService : IProblemDetailsService
     {
         public ValueTask WriteAsync(ProblemDetailsContext context) => ValueTask.CompletedTask;
     }
 
+    [ExcludeFromCodeCoverage]
     private sealed class CapturingLogger<T> : ILogger<T>
     {
         private readonly List<(LogLevel Level, string Message, Exception? Exception)> _entries = [];

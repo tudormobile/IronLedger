@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Logging;
+using System.Diagnostics.CodeAnalysis;
 
 namespace IronLedgerLib.Tests;
 
@@ -206,6 +207,7 @@ public class LoggingTests
 
     // --- Helpers ---
 
+    [ExcludeFromCodeCoverage]
     private sealed class CapturingLogger<T> : ILogger<T>
     {
         private readonly List<(LogLevel Level, string Message, Exception? Exception)> _entries = [];
@@ -228,6 +230,7 @@ public class LoggingTests
             Properties = []
         };
 
+    [ExcludeFromCodeCoverage]
     private sealed class MockComponentDataProvider : IComponentDataProvider
     {
         private readonly IReadOnlyList<ComponentData> _data;
@@ -238,17 +241,20 @@ public class LoggingTests
         public IReadOnlyList<ComponentData> GetData() => _data;
     }
 
+    [ExcludeFromCodeCoverage]
     private sealed class ThrowingComponentDataProvider : IComponentDataProvider
     {
         public IReadOnlyList<ComponentData> GetData()
             => throw new ComponentDataProviderException("Simulated failure") { ProviderName = "TestProvider" };
     }
 
+    [ExcludeFromCodeCoverage]
     private sealed class MockMetadataProvider : IAssetMetadataProvider
     {
         public AssetMetadata GetMetadata() => AssetMetadata.Empty;
     }
 
+    [ExcludeFromCodeCoverage]
     private sealed class ThrowingMetadataProvider : IAssetMetadataProvider
     {
         public AssetMetadata GetMetadata()
