@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using System.Diagnostics.CodeAnalysis;
 using Tudormobile.IronLedgerLib.Serialization;
 
 namespace IronLedgerLib.Tests;
@@ -128,12 +129,64 @@ public class IronLedgerServiceCollectionExtensionsTests
         Assert.AreEqual("BIOS-CUSTOM", assetId.BiosMetadata.SerialNumber);
     }
 
+    [TestMethod]
+    public void AddIronLedger_RegistersIAssetRepository()
+    {
+        var services = new ServiceCollection();
+        services.AddIronLedger();
+
+        var repository = services.BuildServiceProvider().GetService<IAssetRepository>();
+
+        Assert.IsNotNull(repository);
+        Assert.IsInstanceOfType<FileSystemAssetRepository>(repository);
+    }
+
+    [TestMethod]
+    public void AddIronLedger_IAssetRepositoryIsRegisteredAsSingleton()
+    {
+        var provider = new ServiceCollection().AddIronLedger().BuildServiceProvider();
+
+        var first = provider.GetRequiredService<IAssetRepository>();
+        var second = provider.GetRequiredService<IAssetRepository>();
+
+        Assert.AreSame(first, second);
+    }
+
+    [TestMethod]
+    public void AddIronLedger_PreRegisteredRepository_IsNotOverwritten()
+    {
+        var custom = new MockRepository();
+        var services = new ServiceCollection();
+        services.AddSingleton<IAssetRepository>(custom);
+        services.AddIronLedger();
+
+        var resolved = services.BuildServiceProvider().GetRequiredService<IAssetRepository>();
+
+        Assert.AreSame(custom, resolved);
+    }
+
+    [ExcludeFromCodeCoverage]
+    private class MockRepository : IAssetRepository
+    {
+        public Task<IReadOnlyList<string>> GetAllIdentifiersAsync(CancellationToken cancellationToken = default) => Task.FromResult<IReadOnlyList<string>>([]);
+        public Task<IReadOnlyList<AssetRecord>> GetAllAsync(CancellationToken cancellationToken = default) => Task.FromResult<IReadOnlyList<AssetRecord>>([]);
+        public Task<AssetRecord?> GetAsync(string assetId, CancellationToken cancellationToken = default) => Task.FromResult<AssetRecord?>(null);
+        public Task<bool> ExistsAsync(AssetRecord asset, CancellationToken cancellationToken = default) => Task.FromResult(false);
+        public Task SaveAsync(AssetRecord asset, CancellationToken cancellationToken = default) => Task.CompletedTask;
+        public Task DeleteAsync(string assetId, CancellationToken cancellationToken = default) => Task.CompletedTask;
+        public Task<string> GetNotesAsync(string assetId, CancellationToken cancellationToken = default) => Task.FromResult(string.Empty);
+        public Task SaveNotesAsync(string assetId, string markdown, CancellationToken cancellationToken = default) => Task.CompletedTask;
+    }
+
+    [ExcludeFromCodeCoverage]
     private class MockSerializer : IIronLedgerSerializer
     {
+        public string ContentType => "application/json";
         public string Serialize<T>(T value) => string.Empty;
         public T? Deserialize<T>(string data) => default;
     }
 
+    [ExcludeFromCodeCoverage]
     private class MockComponentDataProvider : IComponentDataProvider
     {
         private readonly IReadOnlyList<ComponentData> _data;
@@ -159,13 +212,14 @@ public class IronLedgerServiceCollectionExtensionsTests
         public IReadOnlyList<ComponentData> GetData() => _data;
     }
 
+    [ExcludeFromCodeCoverage]
     private class MockMetadataProvider : IAssetMetadataProvider
     {
         private readonly string _serialNumber;
 
         public MockMetadataProvider(string serialNumber) => _serialNumber = serialNumber;
 
-        public AssetMetadata GetMetadata() => new AssetMetadata
+        public AssetMetadata GetMetadata() => new()
         {
             SerialNumber = _serialNumber,
             Manufacturer = string.Empty,

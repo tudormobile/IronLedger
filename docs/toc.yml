@@ -6,6 +6,8 @@
   href: exception-handling.md
 - name: Serialization
   href: serialization.md
+- name: Data Layer
+  href: data-layer.md
 - name: Tools
   href: tools.md
 - name: API Documentation

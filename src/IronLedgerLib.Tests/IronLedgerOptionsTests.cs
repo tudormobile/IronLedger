@@ -118,6 +118,7 @@ public class IronLedgerOptionsTests
         var systemMetadataProvider = new MockMetadataProvider();
         var baseboardMetadataProvider = new MockMetadataProvider();
         var biosMetadataProvider = new MockMetadataProvider();
+        var dataPath = @"some\path";
 
         var options = new IronLedgerOptions
         {
@@ -128,7 +129,9 @@ public class IronLedgerOptionsTests
             DiskProvider = diskProvider,
             SystemMetadataProvider = systemMetadataProvider,
             BaseboardMetadataProvider = baseboardMetadataProvider,
-            BiosMetadataProvider = biosMetadataProvider
+            BiosMetadataProvider = biosMetadataProvider,
+            DataPath = dataPath
+
         };
 
         Assert.AreSame(serializer, options.Serializer);
@@ -139,10 +142,12 @@ public class IronLedgerOptionsTests
         Assert.AreSame(systemMetadataProvider, options.SystemMetadataProvider);
         Assert.AreSame(baseboardMetadataProvider, options.BaseboardMetadataProvider);
         Assert.AreSame(biosMetadataProvider, options.BiosMetadataProvider);
+        Assert.AreSame(dataPath, options.DataPath);
     }
     [ExcludeFromCodeCoverage]
     private class MockSerializer : IIronLedgerSerializer
     {
+        public string ContentType => "application/json";
         public string Serialize<T>(T value) => string.Empty;
         public T? Deserialize<T>(string data) => default;
     }

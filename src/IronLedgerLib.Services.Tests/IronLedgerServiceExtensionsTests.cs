@@ -1,12 +1,87 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Tudormobile.IronLedgerLib.Services;
 
 namespace IronLedgerLib.Services.Tests;
 
 [TestClass]
 public class IronLedgerServiceExtensionsTests
 {
+    // --- AddIronLedgerClient ---
+
+    [TestMethod]
+    public void AddIronLedgerClient_ReturnsServiceCollection()
+    {
+        var services = new ServiceCollection();
+
+        var result = services.AddIronLedgerClient(o => o.ServerUrl = new Uri("https://myserver:5037"));
+
+        Assert.AreSame(services, result);
+    }
+
+    [TestMethod]
+    public void AddIronLedgerClient_NullServices_Throws()
+        => Assert.ThrowsExactly<ArgumentNullException>(() =>
+            ((IServiceCollection)null!).AddIronLedgerClient(o => o.ServerUrl = new Uri("https://myserver")));
+
+    [TestMethod]
+    public void AddIronLedgerClient_NullConfigure_Throws()
+        => Assert.ThrowsExactly<ArgumentNullException>(() =>
+            new ServiceCollection().AddIronLedgerClient(null!));
+
+    [TestMethod]
+    public void AddIronLedgerClient_NullServerUrl_Throws()
+        => Assert.ThrowsExactly<ArgumentNullException>(() =>
+            new ServiceCollection().AddIronLedgerClient(o => { /* ServerUrl left null */ }));
+
+    [TestMethod]
+    public void AddIronLedgerClient_RegistersIIronLedgerClient()
+    {
+        var services = new ServiceCollection();
+        services.AddIronLedgerClient(o => o.ServerUrl = new Uri("https://myserver:5037"));
+
+        var descriptor = services.FirstOrDefault(d => d.ServiceType == typeof(IIronLedgerClient));
+
+        Assert.IsNotNull(descriptor);
+    }
+
+    [TestMethod]
+    public void AddIronLedgerClient_IIronLedgerClientIsSingleton()
+    {
+        var services = new ServiceCollection();
+        services.AddIronLedgerClient(o => o.ServerUrl = new Uri("https://myserver:5037"));
+
+        var descriptor = services.Single(d => d.ServiceType == typeof(IIronLedgerClient));
+
+        Assert.AreEqual(ServiceLifetime.Singleton, descriptor.Lifetime);
+    }
+
+    [TestMethod]
+    public void AddIronLedgerClient_ConfiguresHttpClientBaseAddress()
+    {
+        var services = new ServiceCollection();
+        var expectedBase = new Uri("https://myserver:5037/");
+        services.AddIronLedgerClient(o => o.ServerUrl = expectedBase);
+
+        var factory = services.BuildServiceProvider().GetRequiredService<IHttpClientFactory>();
+        var httpClient = factory.CreateClient(nameof(IIronLedgerClient));
+
+        Assert.AreEqual(expectedBase, httpClient.BaseAddress);
+    }
+
+    [TestMethod]
+    public void AddIronLedgerClient_EnsuresTrailingSlashOnBaseAddress()
+    {
+        var services = new ServiceCollection();
+        services.AddIronLedgerClient(o => o.ServerUrl = new Uri("https://myserver:5037"));
+
+        var factory = services.BuildServiceProvider().GetRequiredService<IHttpClientFactory>();
+        var httpClient = factory.CreateClient(nameof(IIronLedgerClient));
+
+        Assert.IsTrue(httpClient.BaseAddress!.ToString().EndsWith('/'));
+    }
+
     // --- AddIronLedgerService ---
 
     [TestMethod]

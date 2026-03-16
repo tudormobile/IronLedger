@@ -10,6 +10,45 @@
 public static class IronLedgerServiceExtensions
 {
     /// <summary>
+    /// Adds the IronLedger HTTP client to the specified <see cref="IServiceCollection"/>.
+    /// </summary>
+    /// <remarks>
+    /// Use this method in client-only applications (console, WPF, MAUI, Blazor) that communicate
+    /// with a remote IronLedger service. For applications that host the service, use
+    /// <see cref="AddIronLedgerService"/> instead.
+    /// </remarks>
+    /// <param name="services">The <see cref="IServiceCollection"/> to add services to.</param>
+    /// <param name="configure">Action to configure <see cref="IronLedgerClientOptions"/>. Must set <see cref="IronLedgerClientOptions.ServerUrl"/>.</param>
+    /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
+    public static IServiceCollection AddIronLedgerClient(
+        this IServiceCollection services,
+        Action<IronLedgerClientOptions> configure)
+    {
+        System.ArgumentNullException.ThrowIfNull(services);
+        System.ArgumentNullException.ThrowIfNull(configure);
+
+        var options = new IronLedgerClientOptions();
+        configure(options);
+        System.ArgumentNullException.ThrowIfNull(options.ServerUrl, nameof(options.ServerUrl));
+
+        // Ensure the base address always has a trailing slash so that relative
+        // endpoint paths (e.g. "api/v1/status") resolve correctly against any
+        // path segment that may be present in the server URL.
+        var baseAddress = new Uri(options.ServerUrl.ToString().TrimEnd('/') + "/");
+
+        services.AddHttpClient(nameof(IIronLedgerClient),
+            client => client.BaseAddress = baseAddress);
+
+        services.AddSingleton<IIronLedgerClient>(sp =>
+            IIronLedgerClient.Create(
+                sp.GetRequiredService<IHttpClientFactory>().CreateClient(nameof(IIronLedgerClient)),
+                sp.GetService<ILogger<IronLedgerClient>>(),
+                sp.GetService<IIronLedgerSerializer>()));
+
+        return services;
+    }
+
+    /// <summary>
     /// Adds the IronLedger client and service to the specified <see cref="IServiceCollection"/>.
     /// </summary>
     /// <param name="services">The <see cref="IServiceCollection"/> to add services to.</param>
@@ -21,6 +60,7 @@ public static class IronLedgerServiceExtensions
     {
         System.ArgumentNullException.ThrowIfNull(services);
 
+        services.AddHttpContextAccessor();
         services.AddIronLedger(configure);
         services.AddScoped<IIronLedgerService, IronLedgerService>();
         services.AddExceptionHandler<IronLedgerExceptionHandler>();
@@ -59,9 +99,19 @@ public static class IronLedgerServiceExtensions
 
         prefix = prefix.TrimEnd('/');
 
-        app.MapGet($"{prefix}/api/v1", async Task<IResult> (
-            HttpContext context, IIronLedgerService ironLedgerService, CancellationToken cancellationToken)
-            => await ironLedgerService.GetStatusAsync(context, cancellationToken));
+        // Administrative Endpoints
+        app.MapGet($"{prefix}/api/v1/status", async Task<IResult> (
+            IIronLedgerService ironLedgerService, CancellationToken cancellationToken)
+            => await ironLedgerService.GetStatusAsync(cancellationToken));
+
+        // Asset Ingest and Retrieval
+        app.MapPost($"{prefix}/api/v1/assets/ingest", async Task<IResult> (
+            HttpRequest request, IIronLedgerService ironLedgerService, CancellationToken cancellationToken)
+            => await ironLedgerService.IngestAssetAsync(request.Body, cancellationToken));
+
+        app.MapGet($"{prefix}/api/v1/assets/{{assetId?}}", async Task<IResult> (
+            IIronLedgerService ironLedgerService, string? assetId, CancellationToken cancellationToken)
+            => await ironLedgerService.GetAssetAsync(assetId, cancellationToken));
 
         app.Logger.LogInformation("{ServiceName} is running", nameof(IronLedgerService));
         return app;

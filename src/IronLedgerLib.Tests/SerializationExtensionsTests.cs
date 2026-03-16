@@ -287,6 +287,7 @@ public class SerializationExtensionsTests
 
     private class MockSerializer : IIronLedgerSerializer
     {
+        public string ContentType => "application/json";
         public bool SerializeCalled { get; private set; }
         public bool DeserializeCalled { get; private set; }
 

@@ -56,4 +56,11 @@ public class IronLedgerOptions
     /// If <see langword="null"/>, the default Windows WMI provider is used.
     /// </summary>
     public IAssetMetadataProvider? BiosMetadataProvider { get; set; }
+
+    /// <summary>
+    /// Gets or sets the root directory used by the file-system asset repository.
+    /// If <see langword="null"/>, defaults to a subdirectory named <c>data</c> inside
+    /// the current working directory.
+    /// </summary>
+    public string? DataPath { get; set; }
 }

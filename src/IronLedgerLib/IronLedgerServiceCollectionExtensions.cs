@@ -1,3 +1,4 @@
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Tudormobile.IronLedgerLib;
 using Tudormobile.IronLedgerLib.Serialization;
@@ -39,6 +40,10 @@ public static class IronLedgerServiceCollectionExtensions
             options.MemoryProvider,
             options.DiskProvider,
             sp.GetService<ILogger<ComponentDataFactory>>()));
+
+        var dataPath = options.DataPath ?? Path.Combine(Directory.GetCurrentDirectory(), "data");
+        services.TryAddSingleton<IAssetRepository>(sp =>
+            new FileSystemAssetRepository(dataPath, sp.GetRequiredService<IIronLedgerSerializer>()));
 
         return services;
     }
