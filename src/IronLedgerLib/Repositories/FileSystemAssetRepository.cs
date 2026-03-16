@@ -59,21 +59,6 @@ public class FileSystemAssetRepository : IAssetRepository
         }, cancellationToken);
     }
 
-    private static void CheckForValidId(string id)
-    {
-        if (string.IsNullOrEmpty(id) || id.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
-            throw new FormatException($"'{id}' is not a valid asset identifier: contains invalid path characters.");
-
-        if (id.Length != 64)
-            throw new FormatException($"'{id}' is not a valid asset identifier: expected 64 hex characters, got {id.Length}.");
-
-        foreach (var c in id)
-        {
-            if (c is not ((>= '0' and <= '9') or (>= 'a' and <= 'f')))
-                throw new FormatException($"'{id}' is not a valid asset identifier: '{c}' is not a lowercase hex character.");
-        }
-    }
-
     /// <inheritdoc/>
     public async Task<IReadOnlyList<AssetRecord>> GetAllAsync(CancellationToken cancellationToken = default)
     {
@@ -99,11 +84,10 @@ public class FileSystemAssetRepository : IAssetRepository
     public Task<bool> Exists(AssetRecord asset, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(asset);
-        return Task.Run(() =>
-        {
-            var dir = AssetDirectory(asset.Id.Id);
-            return Directory.Exists(dir);
-        });
+        cancellationToken.ThrowIfCancellationRequested();
+        var dir = AssetDirectory(asset.Id.Id);
+        var exists = Directory.Exists(dir);
+        return Task.FromResult(exists);
     }
 
     /// <inheritdoc/>
@@ -152,8 +136,24 @@ public class FileSystemAssetRepository : IAssetRepository
         await File.WriteAllTextAsync(NotesFilePath(assetId), markdown, cancellationToken);
     }
 
-    private string AssetDirectory(string assetId) => Path.Combine(_dataPath, assetId);
+    private string AssetDirectory(string assetId) => Path.Combine(_dataPath, CheckForValidId(assetId));
     private string AssetFilePath(string assetId) => Path.Combine(AssetDirectory(assetId), AssetFileName);
     private string NotesFilePath(string assetId) => Path.Combine(AssetDirectory(assetId), NotesFileName);
+
+    private static string CheckForValidId(string id)
+    {
+        if (string.IsNullOrEmpty(id) || id.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
+            throw new FormatException($"'{id}' is not a valid asset identifier: contains invalid path characters.");
+
+        if (id.Length != 64)
+            throw new FormatException($"'{id}' is not a valid asset identifier: expected 64 hex characters, got {id.Length}.");
+
+        foreach (var c in id)
+        {
+            if (c is not ((>= '0' and <= '9') or (>= 'a' and <= 'f')))
+                throw new FormatException($"'{id}' is not a valid asset identifier: '{c}' is not a lowercase hex character.");
+        }
+        return id;
+    }
 
 }

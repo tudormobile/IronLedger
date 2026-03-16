@@ -18,7 +18,7 @@ public interface IIronLedgerService
     /// <param name="body">The request body stream containing the serialized asset payload.</param>
     /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
     /// <returns>An <see cref="IResult"/> representing the outcome of the ingest operation.</returns>
-    Task<IResult> InjestAssetAsync(Stream body, CancellationToken cancellationToken);
+    Task<IResult> IngestAssetAsync(Stream body, CancellationToken cancellationToken);
 
     /// <summary>
     /// Retrieves an asset by its identifier, or all asset identifiers when no ID is provided.

@@ -104,10 +104,10 @@ public static class IronLedgerServiceExtensions
             IIronLedgerService ironLedgerService, CancellationToken cancellationToken)
             => await ironLedgerService.GetStatusAsync(cancellationToken));
 
-        // Asset Injest and Retrieval
-        app.MapPost($"{prefix}/api/v1/assets/injest", async Task<IResult> (
+        // Asset Ingest and Retrieval
+        app.MapPost($"{prefix}/api/v1/assets/ingest", async Task<IResult> (
             HttpRequest request, IIronLedgerService ironLedgerService, CancellationToken cancellationToken)
-            => await ironLedgerService.InjestAssetAsync(request.Body, cancellationToken));
+            => await ironLedgerService.IngestAssetAsync(request.Body, cancellationToken));
 
         app.MapGet($"{prefix}/api/v1/assets/{{assetId?}}", async Task<IResult> (
             IIronLedgerService ironLedgerService, string? assetId, CancellationToken cancellationToken)

@@ -31,7 +31,10 @@ Accept: application/json
 ###
 
 # Post a new asset should return 200-Ok OR xxx-Duplicate asset
-POST {{IronLedgerLib.Services_HostAddress}}/api/v1/assets/injest
+POST {{IronLedgerLib.Services_HostAddress}}/api/v1/assets/ingest
+Accept: application/json
+Content-Type: application/json
+
 {
   "system_metadata": {
     "serial_number": "",

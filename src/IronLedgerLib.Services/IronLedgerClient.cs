@@ -41,6 +41,7 @@ public class IronLedgerClient : IIronLedgerClient
         }
         catch (Exception ex)
         {
+            _logger.LogError(ex, "Error while retrieving IronLedger status.");
             return IronLedgerResponse<string>.Failure(ex.Message);
         }
     }

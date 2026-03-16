@@ -1,15 +1,18 @@
 ﻿namespace Tudormobile.IronLedgerLib.Services;
 
 /// <summary>
-/// Represents the result of an IronLedger API call. Exactly one of <see cref="Data"/> or
-/// <see cref="ErrorMessage"/> is non-null; use <see cref="IsSuccess"/> to distinguish them.
+/// Represents the result of an IronLedger API call. Use <see cref="IsSuccess"/> to distinguish success as Data may be
+/// null even in the case of success.
 /// </summary>
 /// <typeparam name="T">The type of data returned on success.</typeparam>
 public sealed class IronLedgerResponse<T>
 {
     /// <summary>
-    /// Gets the data returned by the API call, or <see langword="null"/> if the request failed.
+    /// Gets the data returned by the API call, or <see langword="null"/> on failure/>.
     /// </summary>
+    /// <remarks>
+    /// Can be null on success when no data is returned.
+    /// </remarks>
     public T? Data { get; }
 
     /// <summary>

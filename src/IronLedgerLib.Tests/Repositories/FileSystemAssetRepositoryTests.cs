@@ -1,4 +1,3 @@
-using Tudormobile.IronLedgerLib;
 using Tudormobile.IronLedgerLib.Serialization;
 
 namespace IronLedgerLib.Tests;
@@ -89,7 +88,7 @@ public class FileSystemAssetRepositoryTests
     [TestMethod]
     public async Task GetAsync_WhenAssetDoesNotExist_ReturnsNull()
     {
-        var result = await _repository.GetAsync("nonexistent");
+        var result = await _repository.GetAsync("0000000000000000000000000000000000000000000000000000000000000000");
 
         Assert.IsNull(result);
     }
@@ -149,14 +148,14 @@ public class FileSystemAssetRepositoryTests
 
     [TestMethod]
     public async Task DeleteAsync_NonexistentId_DoesNotThrow()
-        => await _repository.DeleteAsync("nonexistent");
+        => await _repository.DeleteAsync("0000000000000000000000000000000000000000000000000000000000000000");
 
     // --- GetNotesAsync ---
 
     [TestMethod]
     public async Task GetNotesAsync_WhenNoNotesFile_ReturnsEmptyString()
     {
-        var result = await _repository.GetNotesAsync("nonexistent");
+        var result = await _repository.GetNotesAsync("0000000000000000000000000000000000000000000000000000000000000000");
 
         Assert.AreEqual(string.Empty, result);
     }

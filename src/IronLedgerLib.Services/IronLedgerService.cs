@@ -50,7 +50,7 @@ public class IronLedgerService : IIronLedgerService
     /// <param name="cancellationToken">A cancellation token that can be used to cancel the asynchronous operation.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains an <see cref="IResult"/>
     /// indicating the outcome of the ingest operation.</returns>
-    public async Task<IResult> InjestAssetAsync(Stream body, CancellationToken cancellationToken)
+    public async Task<IResult> IngestAssetAsync(Stream body, CancellationToken cancellationToken)
     {
         LogApiRequest();
         using var reader = new StreamReader(body);
