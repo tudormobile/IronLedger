@@ -7,7 +7,7 @@
 public sealed class IronLedgerResponse<T>
 {
     /// <summary>
-    /// Gets the data returned by the API call, or <see langword="null"/> on failure/>.
+    /// Gets the data returned by the API call, or <see langword="null"/> on failure.
     /// </summary>
     /// <remarks>
     /// Can be null on success when no data is returned.
