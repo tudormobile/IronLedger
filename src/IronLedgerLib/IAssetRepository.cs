@@ -40,7 +40,7 @@ public interface IAssetRepository
     /// </summary>
     /// <param name="asset">The asset record to check.</param>
     /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
-    Task<bool> Exists(AssetRecord asset, CancellationToken cancellationToken = default);
+    Task<bool> ExistsAsync(AssetRecord asset, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Deletes the asset record and its associated notes for the given identifier.

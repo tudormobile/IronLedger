@@ -83,11 +83,10 @@ public class IronLedgerClient : IIronLedgerClient
     {
         try
         {
-            HttpResponseMessage response;
             T? result;
             try
             {
-                response = await requestFactory(cancellationToken);
+                using var response = await requestFactory(cancellationToken);
 
                 if (!response.IsSuccessStatusCode)
                     return IronLedgerResponse<T>.Failure($"Unexpected response: {(int)response.StatusCode} {response.ReasonPhrase}");

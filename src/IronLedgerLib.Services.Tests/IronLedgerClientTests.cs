@@ -17,12 +17,12 @@ public class IronLedgerClientTests
 
     [TestMethod]
     public void IronLedgerClient_Constructor_ValidHttpClient_CreatesInstance()
-        => Assert.IsNotNull(new IronLedgerClient(new HttpClient()));
+        => Assert.IsNotNull(new IronLedgerClient(new HttpClient() { BaseAddress = new Uri("http://www.examplecom") }));
 
     [TestMethod]
     public void IronLedgerClient_Create_ReturnsIIronLedgerClientInstance()
     {
-        using var httpClient = new HttpClient();
+        using var httpClient = new HttpClient() { BaseAddress = new Uri("http://www.examplecom") };
         var client = IIronLedgerClient.Create(httpClient);
 
         Assert.IsNotNull(client);
@@ -33,7 +33,7 @@ public class IronLedgerClientTests
     public async Task IronLedgerClient_CreateAssetAsync_ThrowsIfNull()
     {
         // Arrange
-        using var httpClient = new HttpClient(new MockHttpMessageHandler());
+        using var httpClient = new HttpClient(new MockHttpMessageHandler()) { BaseAddress = new Uri("http://www.examplecom") };
         var client = new IronLedgerClient(httpClient);
 
         // Act & Assert

@@ -69,7 +69,7 @@ public class IronLedgerService : IIronLedgerService
                     Processors = [],
                 }
             };
-            var exists = await _repository.Exists(record, cancellationToken);
+            var exists = await _repository.ExistsAsync(record, cancellationToken);
             if (!exists)
             {
                 await _repository.SaveAsync(record, cancellationToken);

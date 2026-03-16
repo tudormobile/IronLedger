@@ -190,7 +190,7 @@ public class IronLedgerServiceTests
             => Task.FromResult<IReadOnlyList<AssetRecord>>([]);
         public Task<AssetRecord?> GetAsync(string assetId, CancellationToken cancellationToken = default)
             => Task.FromResult<AssetRecord?>(null);
-        public Task<bool> Exists(AssetRecord asset, CancellationToken cancellationToken = default)
+        public Task<bool> ExistsAsync(AssetRecord asset, CancellationToken cancellationToken = default)
             => Task.FromResult(false);
         public Task SaveAsync(AssetRecord asset, CancellationToken cancellationToken = default)
             => Task.CompletedTask;
@@ -226,7 +226,7 @@ public class IronLedgerServiceTests
             => Task.FromResult<IReadOnlyList<AssetRecord>>([]);
         public Task<AssetRecord?> GetAsync(string assetId, CancellationToken cancellationToken = default)
             => Task.FromResult(GetResult);
-        public Task<bool> Exists(AssetRecord asset, CancellationToken cancellationToken = default)
+        public Task<bool> ExistsAsync(AssetRecord asset, CancellationToken cancellationToken = default)
             => Task.FromResult(ExistsResult);
         public Task SaveAsync(AssetRecord asset, CancellationToken cancellationToken = default)
             => Task.CompletedTask;

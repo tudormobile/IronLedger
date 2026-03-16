@@ -171,7 +171,7 @@ public class IronLedgerServiceCollectionExtensionsTests
         public Task<IReadOnlyList<string>> GetAllIdentifiersAsync(CancellationToken cancellationToken = default) => Task.FromResult<IReadOnlyList<string>>([]);
         public Task<IReadOnlyList<AssetRecord>> GetAllAsync(CancellationToken cancellationToken = default) => Task.FromResult<IReadOnlyList<AssetRecord>>([]);
         public Task<AssetRecord?> GetAsync(string assetId, CancellationToken cancellationToken = default) => Task.FromResult<AssetRecord?>(null);
-        public Task<bool> Exists(AssetRecord asset, CancellationToken cancellationToken = default) => Task.FromResult(false);
+        public Task<bool> ExistsAsync(AssetRecord asset, CancellationToken cancellationToken = default) => Task.FromResult(false);
         public Task SaveAsync(AssetRecord asset, CancellationToken cancellationToken = default) => Task.CompletedTask;
         public Task DeleteAsync(string assetId, CancellationToken cancellationToken = default) => Task.CompletedTask;
         public Task<string> GetNotesAsync(string assetId, CancellationToken cancellationToken = default) => Task.FromResult(string.Empty);

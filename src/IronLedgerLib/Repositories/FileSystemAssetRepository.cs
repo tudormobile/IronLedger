@@ -81,12 +81,12 @@ public class FileSystemAssetRepository : IAssetRepository
     }
 
     /// <inheritdoc/>
-    public Task<bool> Exists(AssetRecord asset, CancellationToken cancellationToken = default)
+    public Task<bool> ExistsAsync(AssetRecord asset, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(asset);
         cancellationToken.ThrowIfCancellationRequested();
         var dir = AssetDirectory(asset.Id.Id);
-        var exists = Directory.Exists(dir);
+        var exists = Directory.Exists(dir) && File.Exists(AssetFilePath(asset.Id.Id));
         return Task.FromResult(exists);
     }
 
