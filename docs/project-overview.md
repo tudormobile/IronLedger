@@ -28,10 +28,13 @@ The database is structured to support NIST compliance and Component Mobility/Mig
 - **Assignment Table**: Tracks the history of locations for each asset and components.
 
 ### Primary API Interfaces
-#### Ingest and Discovery Endpoints
-- `POST /v1/assets/ingest`: Full hardware snapshot submission.
-- `GET /v1/assets/{asset_id}`: Retrieves asset or asset list.
-- `PATCH /v1/assets/{id}/components`: Specific component update (for maintenance).
+#### Administrative Endpoints
+- `GET /api/v1/status`: Service status.
+- `GET /api/v1/assets/{asset_id}`: Retrieves asset or asset list.
+#### Ingest Endpoints
+- `POST /api/v1/assets/ingest`: Full hardware snapshot submission.
+#### Component Update Endpoints
+- `PATCH /api/v1/assets/{asset_id}/components`: Specific component update (for maintenance).
 #### Sanitization and Disposal Endpoints
 - `POST /v1/disposal/logs`: Submission of sanitization results and certificates.
 - `GET /v1/disposal/pending`: List of assets and components pending disposal.

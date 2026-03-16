@@ -1,6 +1,53 @@
 @IronLedgerLib.Services_HostAddress = http://localhost:5037
 
+# Root endpoint should return an error 404-NotFound
 GET {{IronLedgerLib.Services_HostAddress}}/api/v1
 Accept: application/json
 
+###
+
+# Status endpoint should return status json
+GET {{IronLedgerLib.Services_HostAddress}}/api/v1/status
+Accept: application/json
+
+###
+
+# Assets with no AssetId should return list if asset IDs
+GET {{IronLedgerLib.Services_HostAddress}}/api/v1/assets
+Accept: application/json
+
+###
+
+# Asset with specific Id should return 200-Ok with full Asset OR 404-NotFound
+GET {{IronLedgerLib.Services_HostAddress}}/api/v1/assets/12345
+Accept: application/json
+
+###
+
+# Asset with specific Id should return 200-Ok with full Asset OR 404-NotFound
+GET {{IronLedgerLib.Services_HostAddress}}/api/v1/assets/68e129f573a1758c8ec462e75d0234a30c46c9f8a99359d4c75cfb2a7f0ce4f7
+Accept: application/json
+
+###
+
+# Post a new asset should return 200-Ok OR xxx-Duplicate asset
+POST {{IronLedgerLib.Services_HostAddress}}/api/v1/assets/injest
+{
+  "system_metadata": {
+    "serial_number": "",
+    "manufacturer": "Microsoft Corporation",
+    "product": "Microsoft Surface Laptop, 7th Edition"
+  },
+  "base_board_metadata": {
+    "serial_number": "A9096602003Q436A",
+    "manufacturer": "Microsoft Corporation",
+    "product": "Microsoft Surface Laptop, 7th Edition"
+  },
+  "bios_metadata": {
+    "serial_number": "0F38JP824363HJ",
+    "manufacturer": "Microsoft Corporation",
+    "product": "175.138.235 QCOM   - 8380"
+  },
+  "id": "68e129f573a1758c8ec462e75d0234a30c46c9f8a99359d4c75cfb2a7f0ce4f7"
+}
 ###
