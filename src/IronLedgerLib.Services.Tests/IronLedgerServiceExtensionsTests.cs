@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Tudormobile.IronLedgerLib.Services;
 
 namespace IronLedgerLib.Services.Tests;
 
@@ -208,7 +207,7 @@ public class IronLedgerServiceExtensionsTests
             .SelectMany(ds => ds.Endpoints)
             .OfType<RouteEndpoint>()
             .Any(e =>
-                string.Equals(e.RoutePattern.RawText.TrimStart('/'), normalizedPattern, StringComparison.OrdinalIgnoreCase) &&
+                string.Equals(e.RoutePattern.RawText!.TrimStart('/'), normalizedPattern, StringComparison.OrdinalIgnoreCase) &&
                 (e.Metadata.GetMetadata<IHttpMethodMetadata>()?.HttpMethods.Contains(httpMethod, StringComparer.OrdinalIgnoreCase) == true));
     }
 }
