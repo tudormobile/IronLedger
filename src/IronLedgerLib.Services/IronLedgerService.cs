@@ -133,7 +133,7 @@ public class IronLedgerService : IIronLedgerService
             {
                 var updatedRecord = record with { Components = components };
                 await _repository.SaveAsync(updatedRecord, cancellationToken);
-                return Results.Ok(updatedRecord.Id);
+                return Results.Ok(updatedRecord.Id.Id);
             }
             return record is null ? Results.NotFound(assetId) : Results.BadRequest();
         }, cancellationToken);
