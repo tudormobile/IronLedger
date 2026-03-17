@@ -9,7 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Planned
 - Sample applications
-- Build out services endpoints
 - Improve documentation
 
 ## [0.2.0]
@@ -18,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Initial data layer
 - Introduce service client
 - Refine the CI/CD pipeline
+- Further build out the services endpoints
 
 ## [0.1.0] - 2026-03-15
 ### Added

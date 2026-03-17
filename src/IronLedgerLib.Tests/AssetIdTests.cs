@@ -34,6 +34,79 @@ public class AssetIdTests
     }
 
     [TestMethod]
+    public void AssetId_IsValid_ReturnsFalseWhenNull()
+    {
+        // Arrange
+        string? id = null;
+
+        // Act
+        var isValid = AssetId.IsValid(id);
+
+        // Assert
+        Assert.IsFalse(isValid);
+    }
+
+    [TestMethod]
+    public void AssetId_IsValid_ReturnsFalseWhenEmpty()
+    {
+        // Arrange
+        var id = string.Empty;
+
+        // Act
+        var isValid = AssetId.IsValid(id);
+
+        // Assert
+        Assert.IsFalse(isValid);
+    }
+
+    [TestMethod]
+    public void AssetId_IsValid_ReturnsFalseWhenTooLong()
+    {
+        // Arrange
+        var id = "00123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef";
+
+        // Act
+        var isValid = AssetId.IsValid(id);
+
+        // Assert
+        Assert.IsFalse(isValid);
+    }
+
+    [TestMethod]
+    public void AssetId_IsValid_ReturnsTrueWhenValid()
+    {
+        // Arrange
+        var id = "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef";
+
+        // Act
+        var isValid = AssetId.IsValid(id);
+
+        // Assert
+        Assert.IsTrue(isValid);
+    }
+
+    [TestMethod]
+    public void AssetId_IsValid_ReturnsFalseWhenInvalid()
+    {
+        // Arrange
+        string[] invalidIds =
+            [
+                "/123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+                ":123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+                "[123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+                "A123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+                "~123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+                "123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+            ];
+
+        // Act & Assert
+        foreach (var invalidId in invalidIds)
+        {
+            Assert.IsFalse(AssetId.IsValid(invalidId));
+        }
+    }
+
+    [TestMethod]
     public void AssetId_CanBeCreated_WithRequiredProperties()
     {
         // Arrange

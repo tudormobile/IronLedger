@@ -54,6 +54,15 @@ public record AssetId
     /// <returns>A 64-character hexadecimal string representing the unique identifier.</returns>
     public override string ToString() => Id;
 
+    /// <summary>
+    /// Determines whether the specified string is a valid asset identifier.
+    /// A valid identifier is a 64-character lowercase hexadecimal string produced by a SHA-256 hash.
+    /// </summary>
+    /// <param name="id">The string to validate.</param>
+    /// <returns><see langword="true"/> if <paramref name="id"/> is a valid asset identifier; otherwise, <see langword="false"/>.</returns>
+    public static bool IsValid(string? id)
+        => id is { Length: 64 } && id.All(c => (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f'));
+
     private string ComputeId()
     {
         // Combine all metadata into a single string using pipe delimiter
