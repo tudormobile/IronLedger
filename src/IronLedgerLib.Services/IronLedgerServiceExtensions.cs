@@ -113,6 +113,24 @@ public static class IronLedgerServiceExtensions
             IIronLedgerService ironLedgerService, string? assetId, CancellationToken cancellationToken)
             => await ironLedgerService.GetAssetAsync(assetId, cancellationToken));
 
+        // Component Management
+        app.MapGet($"{prefix}/api/v1/assets/{{assetId}}/components", async Task<IResult> (
+            IIronLedgerService ironLedgerService, string assetId, CancellationToken cancellationToken)
+            => await ironLedgerService.GetComponentsAsync(assetId, cancellationToken));
+
+        app.MapPatch($"{prefix}/api/v1/assets/{{assetId}}/components", async Task<IResult> (
+            HttpRequest request, IIronLedgerService ironLedgerService, string assetId, CancellationToken cancellationToken)
+            => await ironLedgerService.UpdateComponentsAsync(assetId, request.Body, cancellationToken));
+
+        // Notes
+        app.MapGet($"{prefix}/api/v1/assets/{{assetId}}/notes", async Task<IResult> (
+            IIronLedgerService ironLedgerService, string assetId, CancellationToken cancellationToken)
+            => await ironLedgerService.GetNotesAsync(assetId, cancellationToken));
+
+        app.MapPatch($"{prefix}/api/v1/assets/{{assetId}}/notes", async Task<IResult> (
+            HttpRequest request, IIronLedgerService ironLedgerService, string assetId, CancellationToken cancellationToken)
+            => await ironLedgerService.UpdateNotesAsync(assetId, request.Body, cancellationToken));
+
         app.Logger.LogInformation("{ServiceName} is running", nameof(IronLedgerService));
         return app;
     }

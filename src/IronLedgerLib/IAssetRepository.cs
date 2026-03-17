@@ -64,4 +64,16 @@ public interface IAssetRepository
     /// <param name="markdown">The markdown text to save.</param>
     /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
     Task SaveNotesAsync(string assetId, string markdown, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Determines whether the specified asset identifier is valid for this repository.
+    /// </summary>
+    /// <remarks>
+    /// The default implementation accepts any well-formed SHA-256 asset identifier (see <see cref="AssetId.IsValid"/>).
+    /// Override this method in a custom repository to enforce additional constraints,
+    /// such as limiting identifiers to a known set or applying a different format.
+    /// </remarks>
+    /// <param name="assetId">The asset identifier to validate.</param>
+    /// <returns><see langword="true"/> if the identifier is acceptable; otherwise, <see langword="false"/>.</returns>
+    bool ValidateId(string? assetId) => AssetId.IsValid(assetId);
 }

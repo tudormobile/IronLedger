@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Tudormobile.IronLedgerLib.Services;
@@ -152,11 +153,62 @@ public class IronLedgerServiceExtensionsTests
         Assert.AreSame(app, result);
     }
 
+    [TestMethod]
+    public void UseIronLedgerService_RegistersGetComponentsEndpoint()
+    {
+        var app = BuildApp();
+        app.UseIronLedgerExceptionHandler();
+        app.UseIronLedgerService();
+
+        Assert.IsTrue(HasRoute(app, "GET", "api/v1/assets/{assetId}/components"));
+    }
+
+    [TestMethod]
+    public void UseIronLedgerService_RegistersPatchComponentsEndpoint()
+    {
+        var app = BuildApp();
+        app.UseIronLedgerExceptionHandler();
+        app.UseIronLedgerService();
+
+        Assert.IsTrue(HasRoute(app, "PATCH", "api/v1/assets/{assetId}/components"));
+    }
+
+    [TestMethod]
+    public void UseIronLedgerService_RegistersGetNotesEndpoint()
+    {
+        var app = BuildApp();
+        app.UseIronLedgerExceptionHandler();
+        app.UseIronLedgerService();
+
+        Assert.IsTrue(HasRoute(app, "GET", "api/v1/assets/{assetId}/notes"));
+    }
+
+    [TestMethod]
+    public void UseIronLedgerService_RegistersPatchNotesEndpoint()
+    {
+        var app = BuildApp();
+        app.UseIronLedgerExceptionHandler();
+        app.UseIronLedgerService();
+
+        Assert.IsTrue(HasRoute(app, "PATCH", "api/v1/assets/{assetId}/notes"));
+    }
+
     private static WebApplication BuildApp()
     {
         var builder = WebApplication.CreateSlimBuilder();
         builder.Logging.ClearProviders();
         builder.Services.AddIronLedgerService();
         return builder.Build();
+    }
+
+    private static bool HasRoute(WebApplication app, string httpMethod, string routePattern)
+    {
+        var normalizedPattern = routePattern.TrimStart('/');
+        return ((IEndpointRouteBuilder)app).DataSources
+            .SelectMany(ds => ds.Endpoints)
+            .OfType<RouteEndpoint>()
+            .Any(e =>
+                string.Equals(e.RoutePattern.RawText.TrimStart('/'), normalizedPattern, StringComparison.OrdinalIgnoreCase) &&
+                (e.Metadata.GetMetadata<IHttpMethodMetadata>()?.HttpMethods.Contains(httpMethod, StringComparer.OrdinalIgnoreCase) == true));
     }
 }

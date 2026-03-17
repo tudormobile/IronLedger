@@ -34,8 +34,12 @@ The database is structured to support NIST compliance and Component Mobility/Mig
 #### Ingest Endpoints
 - `POST /api/v1/assets/ingest`: Full hardware snapshot submission.
 #### Component Update Endpoints
-- `PATCH /api/v1/assets/{asset_id}/components`: Specific component update (for maintenance).
-#### Sanitization and Disposal Endpoints
+- `GET /api/v1/assets/{asset_id}/components`: Retrieves components associated with an asset.
+- `PATCH /api/v1/assets/{asset_id}/components`: Specific component update (for creation and maintenance).
+#### Notes Update Endpoints
+- `GET /api/v1/assets/{asset_id}/notes`: Retrieves notes associated with an asset.
+- `PATCH /api/v1/assets/{asset_id}/notes`: Update notes associated with an asset.
+#### Sanitization and Disposal Endpoints [PLANNED]
 - `POST /v1/disposal/logs`: Submission of sanitization results and certificates.
 - `GET /v1/disposal/pending`: List of assets and components pending disposal.
 - `PUT /v1/assets/{asset_id}/status`: Updates asset state (active/retired/disposed)
@@ -64,9 +68,9 @@ The identifier type used for asset identification is computed from all of the as
     "product": "Microsoft Surface Laptop, 7th Edition"
   },
   "bios_metadata": {
-    "serial_number": "F625A3DE625E11",
+    "serial_number": "F6655443322211",
     "manufacturer": "Microsoft Corporation",
-    "product": "175.138.235 QCOM   - 8380"
+    "product": "175.678.123 QCOM   - 8888"
   }
 }
 ```

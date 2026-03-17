@@ -51,14 +51,14 @@ public class IronLedgerService : IIronLedgerService
     /// <param name="cancellationToken">A cancellation token that can be used to cancel the asynchronous operation.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains an <see cref="IResult"/>
     /// indicating the outcome of the ingest operation.</returns>
-    public async Task<IResult> IngestAssetAsync(Stream body, CancellationToken cancellationToken)
+    public Task<IResult> IngestAssetAsync(Stream body, CancellationToken cancellationToken)
     {
         LogApiRequest();
-        using var reader = new StreamReader(body, Encoding.UTF8, detectEncodingFromByteOrderMarks: true, bufferSize: 1024, leaveOpen: true);
-        var payload = await reader.ReadToEndAsync(cancellationToken);
-        var asset = _serializer.Deserialize<AssetId>(payload);
-        if (asset is not null)
+        return ExecuteWithBodyAsync(null, body, async payload =>
         {
+            var asset = _serializer.Deserialize<AssetId>(payload);
+            if (asset is null)
+                return Results.BadRequest();
             var record = new AssetRecord()
             {
                 Id = asset,
@@ -77,8 +77,7 @@ public class IronLedgerService : IIronLedgerService
                 return Results.Ok(asset.Id);
             }
             return Results.Conflict(asset.Id);
-        }
-        return Results.BadRequest();
+        }, cancellationToken);
     }
 
     /// <summary>
@@ -93,11 +92,110 @@ public class IronLedgerService : IIronLedgerService
         LogApiRequest();
         if (assetId is null)
         {
-            var all = await _repository.GetAllIdentifiersAsync(cancellationToken);
-            return Results.Ok(all.ToArray());
+            try
+            {
+                var all = await _repository.GetAllIdentifiersAsync(cancellationToken);
+                return Results.Ok(all.ToArray());
+            }
+            catch (Exception ex) when (ex is not OperationCanceledException)
+            {
+                _logger.LogError(ex, "Failed to retrieve all asset identifiers.");
+                return Results.Problem();
+            }
         }
-        var record = await _repository.GetAsync(assetId, cancellationToken);
-        return record is null ? Results.NotFound() : Results.Ok(record);
+        return await ExecuteAsync(assetId, async () =>
+        {
+            var record = await _repository.GetAsync(assetId, cancellationToken);
+            return record is null ? Results.NotFound() : Results.Ok(record);
+        });
+    }
+
+    /// <inheritdoc/>
+    public Task<IResult> GetComponentsAsync(string assetId, CancellationToken cancellationToken)
+    {
+        LogApiRequest();
+        return ExecuteAsync(assetId, async () =>
+        {
+            var record = await _repository.GetAsync(assetId, cancellationToken);
+            return record is null ? Results.NotFound() : Results.Ok(record.Components);
+        });
+    }
+
+    /// <inheritdoc/>
+    public Task<IResult> UpdateComponentsAsync(string assetId, Stream body, CancellationToken cancellationToken)
+    {
+        LogApiRequest();
+        return ExecuteWithBodyAsync(assetId, body, async payload =>
+        {
+            var components = _serializer.Deserialize<SystemComponentData>(payload);
+            var record = await _repository.GetAsync(assetId, cancellationToken);
+            if (components is not null && record is not null)
+            {
+                var updatedRecord = record with { Components = components };
+                await _repository.SaveAsync(updatedRecord, cancellationToken);
+                return Results.Ok(updatedRecord.Id);
+            }
+            return record is null ? Results.NotFound(assetId) : Results.BadRequest();
+        }, cancellationToken);
+    }
+
+    /// <inheritdoc/>
+    public Task<IResult> GetNotesAsync(string assetId, CancellationToken cancellationToken)
+    {
+        LogApiRequest();
+        return ExecuteAsync(assetId, async () =>
+        {
+            var notes = await _repository.GetNotesAsync(assetId, cancellationToken);
+            return Results.Ok(notes);
+        });
+    }
+
+    /// <inheritdoc/>
+    public Task<IResult> UpdateNotesAsync(string assetId, Stream body, CancellationToken cancellationToken)
+    {
+        LogApiRequest();
+        return ExecuteWithBodyAsync(assetId, body, async payload =>
+        {
+            await _repository.SaveNotesAsync(assetId, payload, cancellationToken);
+            return Results.Ok();
+        }, cancellationToken);
+    }
+
+    private async Task<IResult> ExecuteAsync(string assetId, Func<Task<IResult>> operation)
+    {
+        if (!_repository.ValidateId(assetId))
+            return Results.BadRequest();
+        try
+        {
+            return await operation();
+        }
+        catch (Exception ex) when (ex is not OperationCanceledException)
+        {
+            _logger.LogError(ex, "Repository operation failed for asset {AssetId}.", assetId);
+            return Results.Problem();
+        }
+    }
+
+    private async Task<IResult> ExecuteWithBodyAsync(string? assetId, Stream body, Func<string, Task<IResult>> operation, CancellationToken ct)
+    {
+        if (assetId is not null && !_repository.ValidateId(assetId))
+            return Results.BadRequest();
+        try
+        {
+            using var reader = new StreamReader(body, Encoding.UTF8, detectEncodingFromByteOrderMarks: true, bufferSize: 1024, leaveOpen: true);
+            var payload = await reader.ReadToEndAsync(ct);
+            return await operation(payload);
+        }
+        catch (IOException ex)
+        {
+            _logger.LogError(ex, "Failed to read request body for asset {AssetId}.", assetId);
+            return Results.BadRequest();
+        }
+        catch (Exception ex) when (ex is not OperationCanceledException)
+        {
+            _logger.LogError(ex, "Operation failed for asset {AssetId}.", assetId);
+            return Results.Problem();
+        }
     }
 
     /// <summary>
@@ -113,4 +211,5 @@ public class IronLedgerService : IIronLedgerService
             nameof(IronLedgerService), callerName,
             _httpContextAccessor.HttpContext?.Connection.RemoteIpAddress);
     }
+
 }
