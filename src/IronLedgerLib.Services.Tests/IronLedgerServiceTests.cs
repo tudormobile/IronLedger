@@ -164,7 +164,7 @@ public class IronLedgerServiceTests
     }
 
     [TestMethod]
-    public async Task GetAssetAsync_WithInValidAssetId_ReturnsBadRequest()
+    public async Task GetAssetAsync_WithInvalidAssetId_ReturnsBadRequest()
     {
         // Arrange
         var serializer = new IronLedgerJsonSerializer();
@@ -180,7 +180,7 @@ public class IronLedgerServiceTests
     }
 
     [TestMethod]
-    public async Task GetComponentsAsync_WithInValidAssetId_ReturnsBadRequest()
+    public async Task GetComponentsAsync_WithInvalidAssetId_ReturnsBadRequest()
     {
         // Arrange
         var serializer = new IronLedgerJsonSerializer();
