@@ -11,6 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Sample applications
 - Improve documentation
 
+## [0.3.0]
+
+### Added
+- Desktop sample application
+
 ## [0.2.0]
 
 ### Added

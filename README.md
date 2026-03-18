@@ -36,6 +36,7 @@ Console.WriteLine(assetId.Id);
 
 - [src/](src): source projects and tests (library, unit tests, and solution).
 - [docs/](docs): documentation source and generated site artifacts.
+- [samples/](samples): sample applications.
 - [tools/](tools): repository tooling and utilities.
 
 As the project grows, additional libraries and test projects are added under [src/](src) and hosted by the existing solution.
