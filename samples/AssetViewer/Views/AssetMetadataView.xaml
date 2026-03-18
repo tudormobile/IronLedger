@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:converter="clr-namespace:AssetViewer.Converters"
              xmlns:local="clr-namespace:AssetViewer.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -11,14 +12,15 @@
             <Style TargetType="TextBlock">
                 <Setter Property="Margin" Value="4,0"/>
             </Style>
+            <converter:VisibilityConverter x:Key="VisibilityConverter"/>
         </Grid.Resources>
         <!-- Prompts -->
         <TextBlock Grid.Row="0" Text="Product:" />
         <TextBlock Grid.Row="1" Text="Manufacturer:" />
-        <TextBlock Grid.Row="2" Text="Serial No.:" />
+        <TextBlock Grid.Row="2" Text="Serial No.:" Visibility="{Binding SerialNumber, Converter={StaticResource VisibilityConverter}}" />
         <!-- Values -->
         <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Manufacturer}" d:Text="Microsoft Surface Laptop, 7th Edition" />
         <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Manufacturer}" d:Text="Microsoft Corporation" />
-        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding SerialNumber}" d:Text="0000-11112222-3333" />
+        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding SerialNumber}" d:Text="0000-11112222-3333" Visibility="{Binding SerialNumber, Converter={StaticResource VisibilityConverter}}" />
     </Grid>
 </UserControl>
