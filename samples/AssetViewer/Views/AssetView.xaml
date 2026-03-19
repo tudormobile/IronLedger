@@ -106,8 +106,8 @@
                         <TextBlock Text="Notes" Margin="0,0,5,0"/>
                     </StackPanel>
                 </TabItem.Header>
-                <Border SnapsToDevicePixels="True" BorderBrush="{Binding ElementName=TextBox, Path=BorderBrush}" BorderThickness="1" Margin="0,0,10,10" CornerRadius="6" Padding="3">
-                    <TextBox Text="{Binding System.Notes, UpdateSourceTrigger=PropertyChanged}" x:Name="TextBox"
+                <Border SnapsToDevicePixels="True" BorderBrush="{Binding ElementName=NotesTextBox, Path=BorderBrush}" BorderThickness="1" Margin="0,0,10,10" CornerRadius="6" Padding="3">
+                    <TextBox Text="{Binding System.Notes, UpdateSourceTrigger=PropertyChanged}" x:Name="NotesTextBox"
                              AcceptsReturn="True" BorderThickness="0"
                              Padding="10" VerticalScrollBarVisibility="Auto"
                              AcceptsTab="True" TextWrapping="Wrap" MaxLength="1200">
