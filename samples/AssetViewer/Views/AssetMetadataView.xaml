@@ -19,7 +19,7 @@
         <TextBlock Grid.Row="1" Text="Manufacturer:" />
         <TextBlock Grid.Row="2" Text="Serial No.:" Visibility="{Binding SerialNumber, Converter={StaticResource VisibilityConverter}}" />
         <!-- Values -->
-        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Manufacturer}" d:Text="Microsoft Surface Laptop, 7th Edition" />
+        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Product}" d:Text="Microsoft Surface Laptop, 7th Edition" />
         <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Manufacturer}" d:Text="Microsoft Corporation" />
         <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding SerialNumber}" d:Text="0000-11112222-3333" Visibility="{Binding SerialNumber, Converter={StaticResource VisibilityConverter}}" />
     </Grid>
