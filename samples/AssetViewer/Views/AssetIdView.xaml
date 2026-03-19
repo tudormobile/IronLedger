@@ -6,10 +6,10 @@
              xmlns:local="clr-namespace:AssetViewer.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid RowDefinitions="Auto,Auto,Auto">
-        <!-- Top Row, System Metadata -->
+    <Grid RowDefinitions="Auto,Auto">
+        <!-- Top Row, System Metadata (Fixed) -->
         <local:AssetMetadataView DataContext="{Binding SystemMetadata}" />
-        <!-- Middle Row, Baseboard/BIOS Metadata -->
+        <!-- Bottom Row, Baseboard/BIOS Metadata (Can Wrap) -->
         <WrapPanel Grid.Row="1">
             <GroupBox Header="Motherboard" Margin="4,4,4,0" Padding="2,0">
                 <local:AssetMetadataView DataContext="{Binding BaseBoardMetadata}" />
@@ -18,7 +18,5 @@
                 <local:AssetMetadataView DataContext="{Binding BiosMetadata}" />
             </GroupBox>
         </WrapPanel>
-        <!-- Bottom Row, ID string -->
-        <TextBlock Grid.Row="2" Text="{Binding Id}" Margin="6,0,0,0" Foreground="#80808080" d:Text="68e129f573a1758c8ec462e75d0234a30c46c9f8a99359d4c75cfb2a7f0ce4f7"/>
     </Grid>
 </UserControl>

@@ -6,7 +6,7 @@
         xmlns:views="clr-namespace:AssetViewer.Views"
         xmlns:local="clr-namespace:AssetViewer"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Asset Viewer - Local Machine" Height="650" Width="800">
     <Grid>
         <views:AssetView/>
     </Grid>
