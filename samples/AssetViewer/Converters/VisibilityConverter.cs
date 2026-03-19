@@ -8,10 +8,10 @@ namespace AssetViewer.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var visible = true;
+            var visible = value != null;
             if (value is string stringValue)
             {
-                visible = !string.IsNullOrEmpty(stringValue);
+                visible = !string.IsNullOrWhiteSpace(stringValue);
             }
             return visible
                 ? Visibility.Visible
