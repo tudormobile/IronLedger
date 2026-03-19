@@ -47,10 +47,5 @@ namespace AssetViewer.Views
                 _originalValues[textBox] = textBox.Text;
             }
         }
-
-        private void TextBlock_GotFocus(object sender, System.Windows.RoutedEventArgs e)
-        {
-
-        }
     }
 }
