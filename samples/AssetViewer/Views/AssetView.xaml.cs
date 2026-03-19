@@ -20,20 +20,21 @@ namespace AssetViewer.Views
             {
                 if (e.Key == Key.Escape)
                 {
-
-                    Keyboard.ClearFocus();
+                    // Restore original value before clearing focus so bindings see the reverted text.
                     textBox.Text = _originalValues.TryGetValue(textBox, out string? value) ? value : string.Empty;
                     _originalValues.Remove(textBox);
+                    Keyboard.ClearFocus();
                     e.Handled = true;
                 }
-                if (e.Key == Key.Enter)
+                else if (e.Key == Key.Enter)
                 {
-                    Keyboard.ClearFocus();
+                    // If empty, treat as cancel by restoring original text before clearing focus.
                     if (string.IsNullOrEmpty(textBox.Text))
                     {
                         textBox.Text = _originalValues.TryGetValue(textBox, out string? value) ? value : string.Empty;
                         _originalValues.Remove(textBox);
                     }
+                    Keyboard.ClearFocus();
                     e.Handled = true;
                 }
             }
