@@ -27,6 +27,7 @@ internal class IronLedgerClient : IIronLedgerClient
     {
         ArgumentNullException.ThrowIfNull(httpClient, nameof(httpClient));
         ArgumentNullException.ThrowIfNull(httpClient.BaseAddress, "httpClient.BaseAddress");
+        httpClient.BaseAddress = new Uri(httpClient.BaseAddress.ToString().TrimEnd('/') + "/");
         _httpClient = httpClient;
         _logger = logger ?? new NullLogger<IronLedgerClient>();
         _serializer = serializer ?? new IronLedgerJsonSerializer();

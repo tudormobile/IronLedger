@@ -20,6 +20,25 @@ public class IronLedgerClientTests
         => Assert.IsNotNull(new IronLedgerClient(new HttpClient() { BaseAddress = new Uri("http://www.examplecom") }));
 
     [TestMethod]
+    public void IronLedgerClient_Constructor_EnsuresTrailingSlashOnBaseAddress()
+    {
+        using var httpClient = new HttpClient() { BaseAddress = new Uri("https://myserver:5037/prefix") };
+        _ = new IronLedgerClient(httpClient);
+
+        Assert.IsTrue(httpClient.BaseAddress!.ToString().EndsWith('/'));
+    }
+
+    [TestMethod]
+    public void IronLedgerClient_Constructor_PreservesTrailingSlashWhenAlreadyPresent()
+    {
+        var original = new Uri("https://myserver:5037/prefix/");
+        using var httpClient = new HttpClient() { BaseAddress = original };
+        _ = new IronLedgerClient(httpClient);
+
+        Assert.AreEqual(original, httpClient.BaseAddress);
+    }
+
+    [TestMethod]
     public void IronLedgerClient_Create_ReturnsIIronLedgerClientInstance()
     {
         using var httpClient = new HttpClient() { BaseAddress = new Uri("http://www.examplecom") };
