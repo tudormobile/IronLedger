@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="ServiceClient.csproj" />
+  <Project Path="..\\ServiceHost\\ServiceHost.csproj" />
+</Solution>
