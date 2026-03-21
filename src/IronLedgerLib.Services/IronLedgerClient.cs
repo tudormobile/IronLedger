@@ -9,7 +9,7 @@ namespace Tudormobile.IronLedgerLib.Services;
 /// <summary>
 /// Provides methods for interacting with an IronLedger service over HTTP.
 /// </summary>
-public class IronLedgerClient : IIronLedgerClient
+internal class IronLedgerClient : IIronLedgerClient
 {
     private readonly HttpClient _httpClient;
     private readonly ILogger _logger;

@@ -7,7 +7,7 @@ namespace Tudormobile.IronLedgerLib.Services;
 /// <summary>
 /// Provides operations and implements endpoints for the Iron Ledger service.
 /// </summary>
-public class IronLedgerService : IIronLedgerService
+internal class IronLedgerService : IIronLedgerService
 {
     private readonly ILogger _logger;
     private readonly IHttpContextAccessor _httpContextAccessor;

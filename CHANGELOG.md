@@ -12,6 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Refinement of the public interface
 - Additional logging and error handling
 
+## [0.4.0]
+
+### Added
+- Bug fixes
+- Move sereral classes under internal scope
+
 ## [0.3.0] - 2026-03-21
 
 ### Added
