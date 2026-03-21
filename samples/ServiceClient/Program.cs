@@ -25,19 +25,21 @@ internal class Program
             .SetMinimumLevel(LogLevel.Information)
             );
         var logger = loggerFactory.CreateLogger<Program>();
+        var clientLogger = loggerFactory.CreateLogger<IIronLedgerClient>();
 
         logger.LogInformation("Connecting to: {ServiceUrl}", serviceUrl);
 
         // Create the client
-        var httpClient = new HttpClient() { BaseAddress = new Uri(serviceUrl) };
-        var client = IIronLedgerClient.Create(httpClient, logger);
+        using var httpClient = new HttpClient() { BaseAddress = new Uri(serviceUrl) };
+        var client = IIronLedgerClient.Create(httpClient, clientLogger);
 
         // Request remote service status
         logger.LogInformation("Requesting Service Status");
 
         var status = await client.GetStatusAsync();
 
-        if (status.IsSuccess) logger.LogInformation("Success. Data: {Data}", status.Data);
-        else logger.LogError("Request failed: {ErrorMessage}", status.ErrorMessage);
+        logger.LogInformation($"GetStatusAsync() Success: {status.IsSuccess}");
+        if (status.IsSuccess) logger.LogInformation("GetStatusAsync() Data: {Data}", status.Data);
+        else logger.LogError("GetStatusAsync() Error Message: {ErrorMessage}", status.ErrorMessage);
     }
 }

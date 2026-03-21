@@ -4,15 +4,13 @@ This folder contains sample applications that utilize IronLedger packages.
 
 ## Current Layout
 
-- `AssetViewer/`: simple asset management desktop application (stand-alone).
 - `AssetManager/`: simple asset management desktop application (requires service app).
-- `ServiceHost/`: simple web services host application.
+- `AssetViewer/`: simple asset management desktop application (stand-alone).
 - `ServiceClient/`: simple web services client application.
+- `ServiceHost/`: simple web services host application.
 
 > [!IMPORTANT]
 > Sample applications should reference the IronLedger libraries using ***nuget packages***, not *project references*. 
->  
-> Unlike tools, sample applications must be developed and maintained in a manner consistent with library consumers.
 
 ## Repository Structure Guidance
 
