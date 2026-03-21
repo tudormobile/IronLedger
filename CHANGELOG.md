@@ -8,13 +8,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Planned
-- Sample applications
 - Improve documentation
+- Refinement of the public interface
+- Additional logging and error handling
 
 ## [0.3.0]
 
 ### Added
 - Desktop sample application
+- Services host sample application (initial version)
+- Services client sample application (initial version)
 
 ## [0.2.0]
 
