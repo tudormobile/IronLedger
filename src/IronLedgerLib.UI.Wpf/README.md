@@ -31,7 +31,7 @@ Perfect for building windows desktop UI applications that leverage the Iron Ledg
 |----------|--------|
 | **Windows** | ✅ Fully Supported |
 | **Linux** | Not supported or planned |
-| **macOS** | Noy supported or planned |
+| **macOS** | Not supported or planned |
 
 
 ## 📦 Installation
