@@ -1,6 +1,6 @@
 # IronLedger
 
-[![NuGet](https://img.shields.io/nuget/v/Tudormobile.IronLedgerLib.UI..Wpf.svg)](https://www.nuget.org/packages/Tudormobile.IronLedgerLib.UI.Wpf/)
+[![NuGet](https://img.shields.io/nuget/v/Tudormobile.IronLedgerLib.UI.Wpf.svg)](https://www.nuget.org/packages/Tudormobile.IronLedgerLib.UI.Wpf/)
 [![License](https://img.shields.io/github/license/tudormobile/IronLedger)](https://github.com/tudormobile/IronLedger/blob/main/LICENSE.txt)
 [![.NET](https://img.shields.io/badge/.NET-10.0-blue.svg)](https://dotnet.microsoft.com/download)
 
@@ -21,7 +21,7 @@ IronLedgerLib.UI enables applications and services to:
 
 IronLedgerLib.UI.Wpf enables applications and services to:
 - **Views** to display system assets and components on the Windows Desktop platform
-- **Controls** to manage display snd editing of components on Windows desktop
+- **Controls** to manage display and editing of components on Windows desktop
 
 Perfect for building windows desktop UI applications that leverage the Iron Ledger library.
 
@@ -31,7 +31,7 @@ Perfect for building windows desktop UI applications that leverage the Iron Ledg
 |----------|--------|
 | **Windows** | ✅ Fully Supported |
 | **Linux** | Not supported or planned |
-| **macOS** | Noy supported or planned |
+| **macOS** | Not supported or planned |
 
 
 ## 📦 Installation
@@ -127,7 +127,7 @@ This project is licensed under the MIT License - see the [LICENSE](https://githu
 - **GitHub Repository:** https://github.com/tudormobile/IronLedger
 - **Issue Tracker:** https://github.com/tudormobile/IronLedger/issues
 - **Documentation:** https://github.com/tudormobile/IronLedger/tree/main/docs
-- **NuGet Package:** https://www.nuget.org/packages/Tudormobile.IronLedgerLib.UI/
+- **NuGet Package:** https://www.nuget.org/packages/Tudormobile.IronLedgerLib.UI.Wpf/
 
 ## 💡 Use Cases
 
