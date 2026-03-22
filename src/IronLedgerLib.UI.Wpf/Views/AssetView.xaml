@@ -1,0 +1,119 @@
+﻿<UserControl x:Class="Tudormobile.IronLedgerLib.UI.Wpf.Views.AssetView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Tudormobile.IronLedgerLib.UI.Wpf.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.Resources>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+            <DataTemplate x:Key="componentData">
+                <local:ComponentDataView DataContext="{Binding}"/>
+            </DataTemplate>
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBox Grid.Row="0" Padding="10,0" 
+                 HorizontalAlignment="Center" HorizontalContentAlignment="Center" 
+                 Text="{Binding System.DisplayName}" 
+                 PreviewKeyDown="TextBox_PreviewKeyDown"
+                 GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                 Margin="10" FontSize="18" FontWeight="SemiBold" BorderBrush="Transparent">
+        </TextBox>
+        <GroupBox Grid.Row="1" Margin="10,0">
+            <GroupBox.Header>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Visibility="{Binding ElementName=Description, Path=IsKeyboardFocused, Converter={StaticResource BooleanToVisibilityConverter}}" FontFamily="Segoe Fluent Icons" Text="&#xE70F;" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                    <TextBlock Text="Description" />
+                </StackPanel>
+            </GroupBox.Header>
+            <TextBox x:Name="Description" 
+                     PreviewKeyDown="TextBox_PreviewKeyDown"
+                     GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                     Text="{Binding System.Description}" 
+                     TextWrapping="Wrap" Height="40" BorderThickness="0" MaxLength="200"/>
+        </GroupBox>
+        <TextBlock Grid.Row="1" Margin="0,0,14,-9" Opacity=".5"
+                   FontStyle="Italic" FontSize="8"
+                   HorizontalAlignment="Right" 
+                   VerticalAlignment="Bottom"
+                   Text="{Binding AssetId.Id}"/>
+        <local:AssetIdView Grid.Row="2" DataContext="{Binding AssetId}" Margin="10"/>
+
+        <TabControl Grid.Row="3" Padding="10,10,0,0">
+            <TabItem Margin="4,0,0,0" >
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock FontFamily="Segoe Fluent Icons" Text="&#xE770;" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="System" Margin="0,0,5,0"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <ItemsControl ItemsSource="{Binding System.Data.Properties}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <local:ComponentPropertyView />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </TabItem>
+            <TabItem Margin="0">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock FontFamily="Segoe Fluent Icons" Text="&#xE950;" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="Processors" Margin="0,0,5,0"/>
+                        <TextBlock Text="{Binding Processors.Count, StringFormat='{}({0:N0})'}" Opacity=".6" FontSize="10" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <ScrollViewer Grid.Row="5" CanContentScroll="False" VerticalScrollBarVisibility="Visible">
+                    <ItemsControl ItemsSource="{Binding Processors}" ItemTemplate="{StaticResource componentData}"/>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Margin="0">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock FontFamily="Segoe Fluent Icons" Text="&#xE964;" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="Memory" Margin="0,0,5,0"/>
+                        <TextBlock Text="{Binding Memory.Count, StringFormat='{}({0:N0})'}" Opacity=".6" FontSize="10" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <ScrollViewer Grid.Row="5" CanContentScroll="False" VerticalScrollBarVisibility="Visible">
+                    <ItemsControl ItemsSource="{Binding Memory}" ItemTemplate="{StaticResource componentData}"/>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Margin="0">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock FontFamily="Segoe Fluent Icons" FontSize="16" Text="&#xEDA2;" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="Disks" Margin="0,0,5,0"/>
+                        <TextBlock Text="{Binding Disks.Count, StringFormat='{}({0:N0})'}" Opacity=".6" FontSize="10" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <ScrollViewer Grid.Row="5" CanContentScroll="False" VerticalScrollBarVisibility="Visible">
+                    <ItemsControl ItemsSource="{Binding Disks}" ItemTemplate="{StaticResource componentData}"/>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Margin="0">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock FontFamily="Segoe Fluent Icons" Text="&#xF742;" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="Notes" Margin="0,0,5,0"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <Border SnapsToDevicePixels="True" BorderBrush="{Binding ElementName=NotesTextBox, Path=BorderBrush}" BorderThickness="1" Margin="0,0,10,10" CornerRadius="6" Padding="3">
+                    <TextBox Text="{Binding System.Notes, UpdateSourceTrigger=PropertyChanged}" x:Name="NotesTextBox"
+                             AcceptsReturn="True" BorderThickness="0"
+                             Padding="10" VerticalScrollBarVisibility="Auto"
+                             AcceptsTab="True" TextWrapping="Wrap" MaxLength="1200">
+                    </TextBox>
+                </Border>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>
