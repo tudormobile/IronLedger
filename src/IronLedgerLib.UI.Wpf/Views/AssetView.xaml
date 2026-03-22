@@ -71,7 +71,7 @@
                         <TextBlock Text="{Binding Processors.Count, StringFormat='{}({0:N0})'}" Opacity=".6" FontSize="10" VerticalAlignment="Center"/>
                     </StackPanel>
                 </TabItem.Header>
-                <ScrollViewer Grid.Row="5" CanContentScroll="False" VerticalScrollBarVisibility="Visible">
+                <ScrollViewer CanContentScroll="False" VerticalScrollBarVisibility="Visible">
                     <ItemsControl ItemsSource="{Binding Processors}" ItemTemplate="{StaticResource componentData}"/>
                 </ScrollViewer>
             </TabItem>
@@ -83,7 +83,7 @@
                         <TextBlock Text="{Binding Memory.Count, StringFormat='{}({0:N0})'}" Opacity=".6" FontSize="10" VerticalAlignment="Center"/>
                     </StackPanel>
                 </TabItem.Header>
-                <ScrollViewer Grid.Row="5" CanContentScroll="False" VerticalScrollBarVisibility="Visible">
+                <ScrollViewer CanContentScroll="False" VerticalScrollBarVisibility="Visible">
                     <ItemsControl ItemsSource="{Binding Memory}" ItemTemplate="{StaticResource componentData}"/>
                 </ScrollViewer>
             </TabItem>
@@ -95,7 +95,7 @@
                         <TextBlock Text="{Binding Disks.Count, StringFormat='{}({0:N0})'}" Opacity=".6" FontSize="10" VerticalAlignment="Center"/>
                     </StackPanel>
                 </TabItem.Header>
-                <ScrollViewer Grid.Row="5" CanContentScroll="False" VerticalScrollBarVisibility="Visible">
+                <ScrollViewer CanContentScroll="False" VerticalScrollBarVisibility="Visible">
                     <ItemsControl ItemsSource="{Binding Disks}" ItemTemplate="{StaticResource componentData}"/>
                 </ScrollViewer>
             </TabItem>

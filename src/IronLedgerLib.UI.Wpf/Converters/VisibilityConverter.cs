@@ -33,6 +33,11 @@ namespace Tudormobile.IronLedgerLib.UI.Wpf.Converters;
 ///     </description>
 ///   </item>
 /// </list>
+/// <para>
+/// The parameter may be a <see cref="Visibility"/> value or a case-insensitive string equivalent
+/// (e.g. <c>"Visible"</c>, <c>"Hidden"</c>), which is the natural form when set via a XAML
+/// <c>ConverterParameter</c> attribute.
+/// </para>
 /// </remarks>
 public class VisibilityConverter : IValueConverter
 {
@@ -40,20 +45,24 @@ public class VisibilityConverter : IValueConverter
     /// Converts a value to a <see cref="Visibility"/>.
     /// </summary>
     /// <param name="value">The value to evaluate.</param>
-    /// <param name="targetType">The target binding type (unused).</param>
+    /// <param name="targetType">
+    /// The target binding type. This converter always returns <see cref="Visibility"/> and does
+    /// not use this parameter; <see langword="null"/> is accepted.
+    /// </param>
     /// <param name="parameter">
-    /// An optional <see cref="Visibility"/> that controls non-visible state or inverts the result.
+    /// An optional <see cref="Visibility"/> value, or its case-insensitive string equivalent
+    /// (e.g. <c>"Visible"</c>, <c>"Hidden"</c>), that controls the non-visible state or inverts the result.
     /// </param>
     /// <param name="culture">The culture to use (unused).</param>
     /// <returns>A <see cref="Visibility"/> value.</returns>
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         var isVisible = IsVisible(value);
 
         var nonVisibleState = Visibility.Collapsed;
         var invert = false;
 
-        if (parameter is Visibility visibilityParameter)
+        if (TryGetVisibilityParameter(parameter, out var visibilityParameter))
         {
             if (visibilityParameter == Visibility.Visible)
             {
@@ -77,9 +86,26 @@ public class VisibilityConverter : IValueConverter
     /// Not supported. Always throws <see cref="NotImplementedException"/>.
     /// </summary>
     /// <inheritdoc/>
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         throw new NotImplementedException();
+    }
+
+    private static bool TryGetVisibilityParameter(object? parameter, out Visibility visibility)
+    {
+        if (parameter is Visibility v)
+        {
+            visibility = v;
+            return true;
+        }
+
+        if (parameter is string s && Enum.TryParse(s, ignoreCase: true, out visibility))
+        {
+            return true;
+        }
+
+        visibility = default;
+        return false;
     }
 
     private static bool IsVisible(object? value)

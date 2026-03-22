@@ -14,7 +14,7 @@ public class VisibilityConverterTests
         var value = true;
 
         // Act
-        var result = converter.Convert(value, null, null, CultureInfo.InvariantCulture);
+        var result = converter.Convert(value, null!, null, CultureInfo.InvariantCulture);
 
         // Assert
         Assert.AreEqual(Visibility.Visible, result);
@@ -28,7 +28,7 @@ public class VisibilityConverterTests
         var value = false;
 
         // Act
-        var result = converter.Convert(value, null, null, CultureInfo.InvariantCulture);
+        var result = converter.Convert(value, null!, null, CultureInfo.InvariantCulture);
 
         // Assert
         Assert.AreEqual(Visibility.Collapsed, result);
@@ -41,7 +41,7 @@ public class VisibilityConverterTests
     {
         var converter = new VisibilityConverter();
 
-        var result = converter.Convert(null, null, null, CultureInfo.InvariantCulture);
+        var result = converter.Convert(null, null!, null, CultureInfo.InvariantCulture);
 
         Assert.AreEqual(Visibility.Collapsed, result);
     }
@@ -51,7 +51,7 @@ public class VisibilityConverterTests
     {
         var converter = new VisibilityConverter();
 
-        var result = converter.Convert(new object(), null, null, CultureInfo.InvariantCulture);
+        var result = converter.Convert(new object(), null!, null, CultureInfo.InvariantCulture);
 
         Assert.AreEqual(Visibility.Visible, result);
     }
@@ -63,7 +63,7 @@ public class VisibilityConverterTests
     {
         var converter = new VisibilityConverter();
 
-        var result = converter.Convert(string.Empty, null, null, CultureInfo.InvariantCulture);
+        var result = converter.Convert(string.Empty, null!, null, CultureInfo.InvariantCulture);
 
         Assert.AreEqual(Visibility.Collapsed, result);
     }
@@ -73,7 +73,7 @@ public class VisibilityConverterTests
     {
         var converter = new VisibilityConverter();
 
-        var result = converter.Convert("   ", null, null, CultureInfo.InvariantCulture);
+        var result = converter.Convert("   ", null!, null, CultureInfo.InvariantCulture);
 
         Assert.AreEqual(Visibility.Collapsed, result);
     }
@@ -83,7 +83,7 @@ public class VisibilityConverterTests
     {
         var converter = new VisibilityConverter();
 
-        var result = converter.Convert("hello", null, null, CultureInfo.InvariantCulture);
+        var result = converter.Convert("hello", null!, null, CultureInfo.InvariantCulture);
 
         Assert.AreEqual(Visibility.Visible, result);
     }
@@ -95,7 +95,7 @@ public class VisibilityConverterTests
     {
         var converter = new VisibilityConverter();
 
-        var result = converter.Convert(0, null, null, CultureInfo.InvariantCulture);
+        var result = converter.Convert(0, null!, null, CultureInfo.InvariantCulture);
 
         Assert.AreEqual(Visibility.Collapsed, result);
     }
@@ -105,7 +105,7 @@ public class VisibilityConverterTests
     {
         var converter = new VisibilityConverter();
 
-        var result = converter.Convert(42, null, null, CultureInfo.InvariantCulture);
+        var result = converter.Convert(42, null!, null, CultureInfo.InvariantCulture);
 
         Assert.AreEqual(Visibility.Visible, result);
     }
@@ -117,7 +117,7 @@ public class VisibilityConverterTests
     {
         var converter = new VisibilityConverter();
 
-        var result = converter.Convert(null, null, Visibility.Collapsed, CultureInfo.InvariantCulture);
+        var result = converter.Convert(null, null!, Visibility.Collapsed, CultureInfo.InvariantCulture);
 
         Assert.AreEqual(Visibility.Collapsed, result);
     }
@@ -129,7 +129,7 @@ public class VisibilityConverterTests
     {
         var converter = new VisibilityConverter();
 
-        var result = converter.Convert(null, null, Visibility.Hidden, CultureInfo.InvariantCulture);
+        var result = converter.Convert(null, null!, Visibility.Hidden, CultureInfo.InvariantCulture);
 
         Assert.AreEqual(Visibility.Hidden, result);
     }
@@ -139,7 +139,7 @@ public class VisibilityConverterTests
     {
         var converter = new VisibilityConverter();
 
-        var result = converter.Convert(0, null, Visibility.Hidden, CultureInfo.InvariantCulture);
+        var result = converter.Convert(0, null!, Visibility.Hidden, CultureInfo.InvariantCulture);
 
         Assert.AreEqual(Visibility.Hidden, result);
     }
@@ -149,7 +149,7 @@ public class VisibilityConverterTests
     {
         var converter = new VisibilityConverter();
 
-        var result = converter.Convert("hello", null, Visibility.Hidden, CultureInfo.InvariantCulture);
+        var result = converter.Convert("hello", null!, Visibility.Hidden, CultureInfo.InvariantCulture);
 
         Assert.AreEqual(Visibility.Visible, result);
     }
@@ -161,7 +161,7 @@ public class VisibilityConverterTests
     {
         var converter = new VisibilityConverter();
 
-        var result = converter.Convert(null, null, Visibility.Visible, CultureInfo.InvariantCulture);
+        var result = converter.Convert(null, null!, Visibility.Visible, CultureInfo.InvariantCulture);
 
         Assert.AreEqual(Visibility.Visible, result);
     }
@@ -171,7 +171,7 @@ public class VisibilityConverterTests
     {
         var converter = new VisibilityConverter();
 
-        var result = converter.Convert(false, null, Visibility.Visible, CultureInfo.InvariantCulture);
+        var result = converter.Convert(false, null!, Visibility.Visible, CultureInfo.InvariantCulture);
 
         Assert.AreEqual(Visibility.Visible, result);
     }
@@ -181,7 +181,7 @@ public class VisibilityConverterTests
     {
         var converter = new VisibilityConverter();
 
-        var result = converter.Convert(new object(), null, Visibility.Visible, CultureInfo.InvariantCulture);
+        var result = converter.Convert(new object(), null!, Visibility.Visible, CultureInfo.InvariantCulture);
 
         Assert.AreEqual(Visibility.Collapsed, result);
     }
@@ -191,7 +191,7 @@ public class VisibilityConverterTests
     {
         var converter = new VisibilityConverter();
 
-        var result = converter.Convert(true, null, Visibility.Visible, CultureInfo.InvariantCulture);
+        var result = converter.Convert(true, null!, Visibility.Visible, CultureInfo.InvariantCulture);
 
         Assert.AreEqual(Visibility.Collapsed, result);
     }
@@ -204,6 +204,68 @@ public class VisibilityConverterTests
         var converter = new VisibilityConverter();
 
         Assert.ThrowsExactly<NotImplementedException>(
-            () => converter.ConvertBack(Visibility.Visible, null, null, CultureInfo.InvariantCulture));
+            () => converter.ConvertBack(Visibility.Visible, null!, null, CultureInfo.InvariantCulture));
+    }
+
+    // --- String parameters ---
+
+    [TestMethod]
+    public void Convert_ShouldReturnHidden_WhenParameterIsStringHiddenAndValueIsNull()
+    {
+        var converter = new VisibilityConverter();
+
+        var result = converter.Convert(null, null!, "Hidden", CultureInfo.InvariantCulture);
+
+        Assert.AreEqual(Visibility.Hidden, result);
+    }
+
+    [TestMethod]
+    public void Convert_ShouldReturnCollapsed_WhenParameterIsStringCollapsedAndValueIsNull()
+    {
+        var converter = new VisibilityConverter();
+
+        var result = converter.Convert(null, null!, "Collapsed", CultureInfo.InvariantCulture);
+
+        Assert.AreEqual(Visibility.Collapsed, result);
+    }
+
+    [TestMethod]
+    public void Convert_ShouldReturnVisible_WhenParameterIsStringVisibleAndValueIsNull()
+    {
+        var converter = new VisibilityConverter();
+
+        var result = converter.Convert(null, null!, "Visible", CultureInfo.InvariantCulture);
+
+        Assert.AreEqual(Visibility.Visible, result);
+    }
+
+    [TestMethod]
+    public void Convert_ShouldReturnCollapsed_WhenParameterIsStringVisibleAndValueIsNonNull()
+    {
+        var converter = new VisibilityConverter();
+
+        var result = converter.Convert("hello", null!, "Visible", CultureInfo.InvariantCulture);
+
+        Assert.AreEqual(Visibility.Collapsed, result);
+    }
+
+    [TestMethod]
+    public void Convert_ShouldBeCaseInsensitive_WhenParameterIsStringInLowercase()
+    {
+        var converter = new VisibilityConverter();
+
+        var result = converter.Convert(null, null!, "hidden", CultureInfo.InvariantCulture);
+
+        Assert.AreEqual(Visibility.Hidden, result);
+    }
+
+    [TestMethod]
+    public void Convert_ShouldIgnoreParameter_WhenParameterIsUnrecognisedString()
+    {
+        var converter = new VisibilityConverter();
+
+        var result = converter.Convert(null, null!, "notavisibility", CultureInfo.InvariantCulture);
+
+        Assert.AreEqual(Visibility.Collapsed, result);
     }
 }
