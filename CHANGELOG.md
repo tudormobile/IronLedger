@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Refinement of the public interface
 - Additional logging and error handling
 
-## [0.4.0]
+## [0.4.0] - 2026-03-22
 
 ### Added
 - Bug fixes
