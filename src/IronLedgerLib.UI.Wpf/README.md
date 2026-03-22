@@ -127,7 +127,7 @@ This project is licensed under the MIT License - see the [LICENSE](https://githu
 - **GitHub Repository:** https://github.com/tudormobile/IronLedger
 - **Issue Tracker:** https://github.com/tudormobile/IronLedger/issues
 - **Documentation:** https://github.com/tudormobile/IronLedger/tree/main/docs
-- **NuGet Package:** https://www.nuget.org/packages/Tudormobile.IronLedgerLib.UI/
+- **NuGet Package:** https://www.nuget.org/packages/Tudormobile.IronLedgerLib.UI.Wpf/
 
 ## 💡 Use Cases
 
