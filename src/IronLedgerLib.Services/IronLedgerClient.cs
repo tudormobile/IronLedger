@@ -1,6 +1,7 @@
 ﻿
 using Microsoft.Extensions.Logging.Abstractions;
 using System.Net.Http.Headers;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 using Tudormobile.IronLedgerLib.Serialization;
 
@@ -31,11 +32,13 @@ internal class IronLedgerClient : IIronLedgerClient
         _httpClient = httpClient;
         _logger = logger ?? new NullLogger<IronLedgerClient>();
         _serializer = serializer ?? new IronLedgerJsonSerializer();
+        _logger.LogDebug("{ClientName} initialized; BaseAddress={BaseAddress}.", nameof(IronLedgerClient), _httpClient.BaseAddress);
     }
 
     /// <inheritdoc/>
     public Task<IronLedgerResponse<string>> CreateAssetAsync(AssetId assetId, CancellationToken cancellationToken = default)
     {
+        LogRequest();
         ArgumentNullException.ThrowIfNull(assetId, nameof(assetId));
         return ExecuteAsync<string>(
             ct =>
@@ -53,6 +56,7 @@ internal class IronLedgerClient : IIronLedgerClient
     /// <inheritdoc/>
     public Task<IronLedgerResponse<AssetRecord>> GetAssetAsync(string assetIdString, CancellationToken cancellationToken = default)
     {
+        LogRequest();
         ArgumentNullException.ThrowIfNullOrEmpty(assetIdString, nameof(assetIdString));
         return ExecuteAsync<AssetRecord>(
             ct => _httpClient.GetAsync($"api/v1/assets/{assetIdString}", ct),
@@ -62,18 +66,33 @@ internal class IronLedgerClient : IIronLedgerClient
 
     /// <inheritdoc/>
     public Task<IronLedgerResponse<List<string>>> GetAssetIdsAsync(CancellationToken cancellationToken = default)
-        => ExecuteAsync<List<string>>(
+    {
+        LogRequest();
+        return ExecuteAsync<List<string>>(
             ct => _httpClient.GetAsync("api/v1/assets/", ct),
             nameof(GetAssetIdsAsync),
             cancellationToken);
+    }
 
     /// <inheritdoc/>
     public Task<IronLedgerResponse<string>> GetStatusAsync(CancellationToken cancellationToken = default)
-        => ExecuteAsync<string>(
+    {
+        LogRequest();
+        return ExecuteAsync<string>(
             ct => _httpClient.GetAsync("api/v1/status", ct),
             nameof(GetStatusAsync),
             cancellationToken,
             deserialize: body => body);
+    }
+
+    private void LogRequest([CallerMemberName] string callerName = "")
+    {
+        if (!_logger.IsEnabled(LogLevel.Information))
+            return;
+
+        _logger.LogInformation("{ClientName}, {CallerName}, {BaseAddress}",
+            nameof(IronLedgerClient), callerName, _httpClient.BaseAddress);
+    }
 
     private async Task<IronLedgerResponse<T>> ExecuteAsync<T>(
         Func<CancellationToken, Task<HttpResponseMessage>> requestFactory,
@@ -91,6 +110,8 @@ internal class IronLedgerClient : IIronLedgerClient
 
                 if (!response.IsSuccessStatusCode)
                     return IronLedgerResponse<T>.Failure($"Unexpected response: {(int)response.StatusCode} {response.ReasonPhrase}");
+
+                _logger.LogDebug("{Operation} received HTTP {StatusCode}.", operationName, (int)response.StatusCode);
 
                 var body = await response.Content.ReadAsStringAsync(cancellationToken);
                 result = deserialize != null ? deserialize(body) : _serializer.Deserialize<T>(body);
