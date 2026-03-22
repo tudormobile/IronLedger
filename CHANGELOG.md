@@ -9,8 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Planned
 - Improve documentation
-- Refinement of the public interface
-- Additional logging and error handling
+
+## [0.5.0] - 
+
+### Added
+- Refined the public interface
+- Moved some UI elements from Wpf sample app into a new UI library for Wpf
+- Updated package references in sample applications
 
 ## [0.4.0] - 2026-03-22
 

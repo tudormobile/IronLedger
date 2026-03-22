@@ -4,5 +4,7 @@
   <Project Path="IronLedgerLib.Tests/IronLedgerLib.Tests.csproj" />
   <Project Path="IronLedgerLib.UI/IronLedgerLib.UI.csproj" />
   <Project Path="IronLedgerLib.UI.Tests/IronLedgerLib.UI.Tests.csproj" />
+  <Project Path="IronLedgerLib.UI.Wpf/IronLedgerLib.UI.Wpf.csproj" />
+  <Project Path="IronLedgerLib.UI.Wpf.Tests/IronLedgerLib.UI.Wpf.Tests.csproj" />
   <Project Path="IronLedgerLib/IronLedgerLib.csproj" />
 </Solution>
