@@ -21,7 +21,7 @@ IronLedgerLib.UI enables applications and services to:
 
 IronLedgerLib.UI.Wpf enables applications and services to:
 - **Views** to display system assets and components on the Windows Desktop platform
-- **Controls** to manage display snd editing of components on Windows desktop
+- **Controls** to manage display and editing of components on Windows desktop
 
 Perfect for building windows desktop UI applications that leverage the Iron Ledger library.
 
