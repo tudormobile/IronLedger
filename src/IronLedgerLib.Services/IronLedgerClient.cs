@@ -107,7 +107,7 @@ internal class IronLedgerClient : IIronLedgerClient
                 var content = new StringContent(_serializer.Serialize(components), new MediaTypeHeaderValue(_serializer.ContentType));
                 return _httpClient.PatchAsync($"api/v1/assets/{assetIdString}/components", content, ct);
             },
-            nameof(SetNotesAsync),
+            nameof(SetComponentsAsync),
             cancellationToken,
             validate: returnedId => returnedId == assetIdString
                 ? IronLedgerResponse<string>.Success(assetIdString)
