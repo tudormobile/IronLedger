@@ -59,4 +59,80 @@ public interface IIronLedgerClient
     /// asset IDs. The list will be empty if no assets are found.</returns>
     Task<IronLedgerResponse<List<string>>> GetAssetIdsAsync(CancellationToken cancellationToken = default);
 
+    /// <summary>
+    /// Asynchronously retrieves the components associated with the specified asset.
+    /// </summary>
+    /// <param name="assetIdString">The unique identifier of the asset for which to retrieve components. Cannot be null or empty.</param>
+    /// <param name="cancellationToken">A cancellation token that can be used to cancel the asynchronous operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains an IronLedgerResponse with the
+    /// components returned as SystemComponentData.</returns>
+    Task<IronLedgerResponse<SystemComponentData>> GetComponentsAsync(string assetIdString, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Asynchronously retrieves the components associated with the specified asset.
+    /// </summary>
+    /// <param name="assetId">The identifier of the asset for which to retrieve components.</param>
+    /// <param name="cancellationToken">A cancellation token that can be used to cancel the asynchronous operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains an IronLedgerResponse with the
+    /// components returned as SystemComponentData.</returns>
+    Task<IronLedgerResponse<SystemComponentData>> GetComponentsAsync(AssetId assetId, CancellationToken cancellationToken = default) => GetComponentsAsync(assetId.Id, cancellationToken);
+
+    /// <summary>
+    /// Asynchronously sets the components for the specified asset.
+    /// </summary>
+    /// <param name="assetIdString">The unique identifier of the asset for which to set components. Cannot be null or empty.</param>
+    /// <param name="components">The components to associate with the asset.</param>
+    /// <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains an IronLedgerResponse with the
+    /// string identifier of the updated asset.</returns>
+    Task<IronLedgerResponse<string>> SetComponentsAsync(string assetIdString, SystemComponentData components, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Asynchronously sets the components for the specified asset.
+    /// </summary>
+    /// <param name="assetId">The identifier of the asset for which to set components. Cannot be null or empty.</param>
+    /// <param name="components">The notes to associate with the asset.</param>
+    /// <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains an IronLedgerResponse with the
+    /// string identifier of the updated asset.</returns>
+    Task<IronLedgerResponse<string>> SetComponentsAsync(AssetId assetId, SystemComponentData components, CancellationToken cancellationToken = default) => SetComponentsAsync(assetId.Id, components, cancellationToken);
+
+    /// <summary>
+    /// Asynchronously retrieves the notes associated with the specified asset.
+    /// </summary>
+    /// <param name="assetIdString">The unique identifier of the asset for which to retrieve notes. Cannot be null or empty.</param>
+    /// <param name="cancellationToken">A cancellation token that can be used to cancel the asynchronous operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains an IronLedgerResponse with the notes
+    /// as a string. If no notes are found, the response may contain an empty string.</returns>
+    Task<IronLedgerResponse<string>> GetNotesAsync(string assetIdString, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Asynchronously retrieves the notes associated with the specified asset.
+    /// </summary>
+    /// <param name="assetId">The identifier of the asset for which to retrieve notes.</param>
+    /// <param name="cancellationToken">A cancellation token that can be used to cancel the asynchronous operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains an IronLedgerResponse with the notes
+    /// for the specified asset as a string.</returns>
+    Task<IronLedgerResponse<string>> GetNotesAsync(AssetId assetId, CancellationToken cancellationToken = default) => GetNotesAsync(assetId.Id, cancellationToken);
+
+    /// <summary>
+    /// Asynchronously sets the notes for the specified asset.
+    /// </summary>
+    /// <param name="assetIdString">The unique identifier of the asset for which to set notes. Cannot be null or empty.</param>
+    /// <param name="notes">The notes to associate with the asset. May be an empty string to clear existing notes.</param>
+    /// <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains an IronLedgerResponse with the
+    /// string identifier of the updated asset.</returns>
+    Task<IronLedgerResponse<string>> SetNotesAsync(string assetIdString, string notes, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Asynchronously sets the notes for the specified asset.
+    /// </summary>
+    /// <param name="assetId">The identifier of the asset for which to set notes. Cannot be null or empty.</param>
+    /// <param name="notes">The notes to associate with the asset. May be an empty string to clear existing notes.</param>
+    /// <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains an IronLedgerResponse with the
+    /// string identifier of the updated asset.</returns>
+    Task<IronLedgerResponse<string>> SetNotesAsync(AssetId assetId, string notes, CancellationToken cancellationToken = default) => SetNotesAsync(assetId.Id, notes, cancellationToken);
+
 }

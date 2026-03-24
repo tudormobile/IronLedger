@@ -456,6 +456,347 @@ public class IronLedgerClientTests
         Assert.AreEqual("Response contained no data.", result.ErrorMessage);
     }
 
+    // --- GetNotesAsync ---
+
+    [TestMethod]
+    public async Task GetNotesAsync_WithNullAssetId_Throws()
+    {
+        using var httpClient = new HttpClient(new MockHttpMessageHandler()) { BaseAddress = new Uri("http://www.example.com/") };
+        var client = new IronLedgerClient(httpClient);
+
+        var exception = await Assert.ThrowsExactlyAsync<ArgumentNullException>(() => client.GetNotesAsync(null!, TestContext.CancellationToken));
+
+        Assert.Contains("assetIdString", exception.Message);
+    }
+
+    [TestMethod]
+    public async Task GetNotesAsync_WithEmptyAssetId_Throws()
+    {
+        using var httpClient = new HttpClient(new MockHttpMessageHandler()) { BaseAddress = new Uri("http://www.example.com/") };
+        var client = new IronLedgerClient(httpClient);
+
+        var exception = await Assert.ThrowsExactlyAsync<ArgumentException>(() => client.GetNotesAsync(string.Empty, TestContext.CancellationToken));
+
+        Assert.Contains("assetIdString", exception.Message);
+    }
+
+    [TestMethod]
+    public async Task GetNotesAsync_RequestsCorrectEndpoint()
+    {
+        var handler = new MockHttpMessageHandler() { JsonResponse = "\"some notes\"" };
+        using var httpClient = new HttpClient(handler) { BaseAddress = new Uri("https://myserver:5037/") };
+        var client = new IronLedgerClient(httpClient);
+
+        await client.GetNotesAsync("my-asset-id", TestContext.CancellationToken);
+
+        Assert.AreEqual("https://myserver:5037/api/v1/assets/my-asset-id/notes", handler.ProvidedRequestUri!.ToString());
+    }
+
+    [TestMethod]
+    public async Task GetNotesAsync_OnSuccess_ReturnsNotes()
+    {
+        const string notes = "\"these are the asset notes\"";
+        var handler = new MockHttpMessageHandler() { JsonResponse = notes };
+        using var httpClient = new HttpClient(handler) { BaseAddress = new Uri("https://myserver:5037/") };
+        var client = new IronLedgerClient(httpClient);
+
+        var result = await client.GetNotesAsync("my-asset-id", TestContext.CancellationToken);
+
+        Assert.IsTrue(result.IsSuccess);
+        Assert.AreEqual(notes, result.Data);
+    }
+
+    [TestMethod]
+    public async Task GetNotesAsync_OnHttpError_ReturnsFailure()
+    {
+        var handler = new MockHttpMessageHandler() { AlwaysResponds = new HttpResponseMessage(HttpStatusCode.InternalServerError) };
+        using var httpClient = new HttpClient(handler) { BaseAddress = new Uri("https://myserver:5037/") };
+        var client = new IronLedgerClient(httpClient);
+
+        var result = await client.GetNotesAsync("my-asset-id", TestContext.CancellationToken);
+
+        Assert.IsFalse(result.IsSuccess);
+        Assert.IsNotNull(result.ErrorMessage);
+    }
+
+    [TestMethod]
+    public async Task GetNotesAsync_ByAssetId_RequestsCorrectEndpoint()
+    {
+        var assetId = new AssetId() { BaseBoardMetadata = AssetMetadata.Empty, BiosMetadata = AssetMetadata.Empty, SystemMetadata = AssetMetadata.Empty };
+        var handler = new MockHttpMessageHandler() { JsonResponse = "some notes" };
+        using var httpClient = new HttpClient(handler) { BaseAddress = new Uri("https://myserver:5037/") };
+        var client = IIronLedgerClient.Create(httpClient);
+
+        var result = await client.GetNotesAsync(assetId, TestContext.CancellationToken);
+
+        Assert.IsTrue(result.IsSuccess);
+        Assert.AreEqual($"https://myserver:5037/api/v1/assets/{assetId.Id}/notes", handler.ProvidedRequestUri!.ToString());
+    }
+
+    // --- SetNotesAsync ---
+
+    [TestMethod]
+    public async Task SetNotesAsync_WithNullAssetId_Throws()
+    {
+        using var httpClient = new HttpClient(new MockHttpMessageHandler()) { BaseAddress = new Uri("http://www.example.com/") };
+        var client = new IronLedgerClient(httpClient);
+
+        await Assert.ThrowsExactlyAsync<ArgumentNullException>(() => client.SetNotesAsync(null!, "notes", TestContext.CancellationToken));
+    }
+
+    [TestMethod]
+    public async Task SetNotesAsync_RequestsCorrectEndpoint()
+    {
+        const string assetIdString = "my-asset-id";
+        var handler = new MockHttpMessageHandler() { JsonResponse = $"\"{assetIdString}\"" };
+        using var httpClient = new HttpClient(handler) { BaseAddress = new Uri("https://myserver:5037/") };
+        var client = new IronLedgerClient(httpClient);
+
+        await client.SetNotesAsync(assetIdString, "notes", TestContext.CancellationToken);
+
+        Assert.AreEqual($"https://myserver:5037/api/v1/assets/{assetIdString}/notes", handler.ProvidedRequestUri!.ToString());
+    }
+
+    [TestMethod]
+    public async Task SetNotesAsync_OnMatchingResponse_ReturnsSuccess()
+    {
+        const string assetIdString = "my-asset-id";
+        var handler = new MockHttpMessageHandler() { JsonResponse = $"\"{assetIdString}\"" };
+        using var httpClient = new HttpClient(handler) { BaseAddress = new Uri("https://myserver:5037/") };
+        var client = new IronLedgerClient(httpClient);
+
+        var result = await client.SetNotesAsync(assetIdString, "these are notes", TestContext.CancellationToken);
+
+        Assert.IsTrue(result.IsSuccess);
+        Assert.AreEqual(assetIdString, result.Data);
+    }
+
+    [TestMethod]
+    public async Task SetNotesAsync_WithFullAssetId_OnMatchingResponse_ReturnsSuccess()
+    {
+        var assetId = new AssetId()
+        {
+            BaseBoardMetadata = AssetMetadata.Empty,
+            BiosMetadata = AssetMetadata.Empty,
+            SystemMetadata = AssetMetadata.Empty,
+        };
+        var assetIdString = assetId.Id;
+
+        var handler = new MockHttpMessageHandler() { JsonResponse = $"\"{assetIdString}\"" };
+        using var httpClient = new HttpClient(handler) { BaseAddress = new Uri("https://myserver:5037/") };
+        var client = IIronLedgerClient.Create(httpClient);
+
+        var result = await client.SetNotesAsync(assetId, "these are notes", TestContext.CancellationToken);
+
+        Assert.IsTrue(result.IsSuccess);
+        Assert.AreEqual(assetIdString, result.Data);
+
+    }
+
+    [TestMethod]
+    public async Task SetNotesAsync_OnMismatchedResponse_ReturnsFailure()
+    {
+        var handler = new MockHttpMessageHandler() { JsonResponse = "\"different-id\"" };
+        using var httpClient = new HttpClient(handler) { BaseAddress = new Uri("https://myserver:5037/") };
+        var client = new IronLedgerClient(httpClient);
+
+        var result = await client.SetNotesAsync("my-asset-id", "notes", TestContext.CancellationToken);
+
+        Assert.IsFalse(result.IsSuccess);
+        Assert.IsNotNull(result.ErrorMessage);
+    }
+
+    [TestMethod]
+    public async Task SetNotesAsync_OnHttpError_ReturnsFailure()
+    {
+        var handler = new MockHttpMessageHandler() { AlwaysResponds = new HttpResponseMessage(HttpStatusCode.InternalServerError) };
+        using var httpClient = new HttpClient(handler) { BaseAddress = new Uri("https://myserver:5037/") };
+        var client = new IronLedgerClient(httpClient);
+
+        var result = await client.SetNotesAsync("my-asset-id", "notes", TestContext.CancellationToken);
+
+        Assert.IsFalse(result.IsSuccess);
+        Assert.IsNotNull(result.ErrorMessage);
+    }
+
+    // --- GetComponentsAsync ---
+
+    [TestMethod]
+    public async Task GetComponentsAsync_WithNullAssetId_Throws()
+    {
+        using var httpClient = new HttpClient(new MockHttpMessageHandler()) { BaseAddress = new Uri("http://www.example.com/") };
+        var client = new IronLedgerClient(httpClient);
+
+        var exception = await Assert.ThrowsExactlyAsync<ArgumentNullException>(() => client.GetComponentsAsync(null!, TestContext.CancellationToken));
+
+        Assert.Contains("assetIdString", exception.Message);
+    }
+
+    [TestMethod]
+    public async Task GetComponentsAsync_WithEmptyAssetId_Throws()
+    {
+        using var httpClient = new HttpClient(new MockHttpMessageHandler()) { BaseAddress = new Uri("http://www.example.com/") };
+        var client = new IronLedgerClient(httpClient);
+
+        var exception = await Assert.ThrowsExactlyAsync<ArgumentException>(() => client.GetComponentsAsync(string.Empty, TestContext.CancellationToken));
+
+        Assert.Contains("assetIdString", exception.Message);
+    }
+
+    [TestMethod]
+    public async Task GetComponentsAsync_RequestsCorrectEndpoint()
+    {
+        var handler = new MockHttpMessageHandler() { JsonResponse = @"{""system"":{""metadata"":{""serial_number"":"""",""manufacturer"":"""",""product"":""""},""caption"":"""",""properties"":{}},""processors"":[],""memory"":[],""disks"":[]}" };
+        using var httpClient = new HttpClient(handler) { BaseAddress = new Uri("https://myserver:5037/") };
+        var client = new IronLedgerClient(httpClient);
+
+        await client.GetComponentsAsync("my-asset-id", TestContext.CancellationToken);
+
+        Assert.AreEqual("https://myserver:5037/api/v1/assets/my-asset-id/components", handler.ProvidedRequestUri!.ToString());
+    }
+
+    [TestMethod]
+    public async Task GetComponentsAsync_OnSuccess_ReturnsComponentData()
+    {
+        var handler = new MockHttpMessageHandler() { JsonResponse = @"{""system"":{""metadata"":{""serial_number"":"""",""manufacturer"":"""",""product"":""""},""caption"":"""",""properties"":{}},""processors"":[],""memory"":[],""disks"":[]}" };
+        using var httpClient = new HttpClient(handler) { BaseAddress = new Uri("https://myserver:5037/") };
+        var client = new IronLedgerClient(httpClient);
+
+        var result = await client.GetComponentsAsync("my-asset-id", TestContext.CancellationToken);
+
+        Assert.IsTrue(result.IsSuccess);
+        Assert.IsNotNull(result.Data);
+        Assert.IsNotNull(result.Data.System);
+        Assert.HasCount(0, result.Data.Processors);
+        Assert.HasCount(0, result.Data.Memory);
+        Assert.HasCount(0, result.Data.Disks);
+    }
+
+    [TestMethod]
+    public async Task GetComponentsAsync_WithFullAssetId_PassesId()
+    {
+        var handler = new MockHttpMessageHandler() { JsonResponse = @"{""system"":{""metadata"":{""serial_number"":"""",""manufacturer"":"""",""product"":""""},""caption"":"""",""properties"":{}},""processors"":[],""memory"":[],""disks"":[]}" };
+        using var httpClient = new HttpClient(handler) { BaseAddress = new Uri("https://myserver:5037/") };
+        var assetId = new AssetId()
+        {
+            BaseBoardMetadata = AssetMetadata.Empty,
+            BiosMetadata = AssetMetadata.Empty,
+            SystemMetadata = AssetMetadata.Empty,
+        };
+        var id = assetId.Id;
+        var client = IIronLedgerClient.Create(httpClient);
+
+        var result = await client.GetComponentsAsync(assetId, TestContext.CancellationToken);
+
+        Assert.Contains(id, handler.ProvidedRequestUri!.ToString());
+    }
+
+
+
+    [TestMethod]
+    public async Task GetComponentsAsync_OnHttpError_ReturnsFailure()
+    {
+        var handler = new MockHttpMessageHandler() { AlwaysResponds = new HttpResponseMessage(HttpStatusCode.InternalServerError) };
+        using var httpClient = new HttpClient(handler) { BaseAddress = new Uri("https://myserver:5037/") };
+        var client = new IronLedgerClient(httpClient);
+
+        var result = await client.GetComponentsAsync("my-asset-id", TestContext.CancellationToken);
+
+        Assert.IsFalse(result.IsSuccess);
+        Assert.IsNotNull(result.ErrorMessage);
+    }
+
+    // --- SetComponentsAsync ---
+
+    [TestMethod]
+    public async Task SetComponentsAsync_WithNullAssetId_Throws()
+    {
+        using var httpClient = new HttpClient(new MockHttpMessageHandler()) { BaseAddress = new Uri("http://www.example.com/") };
+        var client = new IronLedgerClient(httpClient);
+        var components = new SystemComponentData { System = ComponentData.Empty, Processors = [], Memory = [], Disks = [] };
+
+        await Assert.ThrowsExactlyAsync<ArgumentNullException>(() => client.SetComponentsAsync(null!, components, TestContext.CancellationToken));
+    }
+
+    [TestMethod]
+    public async Task SetComponentsAsync_RequestsCorrectEndpoint()
+    {
+        const string assetIdString = "my-asset-id";
+        var handler = new MockHttpMessageHandler() { JsonResponse = $"\"{assetIdString}\"" };
+        using var httpClient = new HttpClient(handler) { BaseAddress = new Uri("https://myserver:5037/") };
+        var client = new IronLedgerClient(httpClient);
+        var components = new SystemComponentData { System = ComponentData.Empty, Processors = [], Memory = [], Disks = [] };
+
+        await client.SetComponentsAsync(assetIdString, components, TestContext.CancellationToken);
+
+        Assert.AreEqual($"https://myserver:5037/api/v1/assets/{assetIdString}/components", handler.ProvidedRequestUri!.ToString());
+    }
+
+    [TestMethod]
+    public async Task SetComponentsAsync_WithFullAssetId_RequestsCorrectEndpoint()
+    {
+        var assetId = new AssetId()
+        {
+            BaseBoardMetadata = AssetMetadata.Empty,
+            BiosMetadata = AssetMetadata.Empty,
+            SystemMetadata = AssetMetadata.Empty,
+        };
+        var id = assetId.Id;
+
+        var handler = new MockHttpMessageHandler() { JsonResponse = $"\"{id}\"" };
+        using var httpClient = new HttpClient(handler) { BaseAddress = new Uri("https://myserver:5037/") };
+        var client = IIronLedgerClient.Create(httpClient);
+        var components = new SystemComponentData { System = ComponentData.Empty, Processors = [], Memory = [], Disks = [] };
+
+        await client.SetComponentsAsync(assetId, components, TestContext.CancellationToken);
+
+        Assert.AreEqual($"https://myserver:5037/api/v1/assets/{id}/components", handler.ProvidedRequestUri!.ToString());
+
+    }
+
+    [TestMethod]
+    public async Task SetComponentsAsync_OnMatchingResponse_ReturnsSuccess()
+    {
+        const string assetIdString = "my-asset-id";
+        var handler = new MockHttpMessageHandler() { JsonResponse = $"\"{assetIdString}\"" };
+        using var httpClient = new HttpClient(handler) { BaseAddress = new Uri("https://myserver:5037/") };
+        var client = new IronLedgerClient(httpClient);
+        var components = new SystemComponentData { System = ComponentData.Empty, Processors = [], Memory = [], Disks = [] };
+
+        var result = await client.SetComponentsAsync(assetIdString, components, TestContext.CancellationToken);
+
+        Assert.IsTrue(result.IsSuccess);
+        Assert.AreEqual(assetIdString, result.Data);
+    }
+
+    [TestMethod]
+    public async Task SetComponentsAsync_OnMismatchedResponse_ReturnsFailure()
+    {
+        var handler = new MockHttpMessageHandler() { JsonResponse = "\"different-id\"" };
+        using var httpClient = new HttpClient(handler) { BaseAddress = new Uri("https://myserver:5037/") };
+        var client = new IronLedgerClient(httpClient);
+        var components = new SystemComponentData { System = ComponentData.Empty, Processors = [], Memory = [], Disks = [] };
+
+        var result = await client.SetComponentsAsync("my-asset-id", components, TestContext.CancellationToken);
+
+        Assert.IsFalse(result.IsSuccess);
+        Assert.IsNotNull(result.ErrorMessage);
+    }
+
+    [TestMethod]
+    public async Task SetComponentsAsync_OnHttpError_ReturnsFailure()
+    {
+        var handler = new MockHttpMessageHandler() { AlwaysResponds = new HttpResponseMessage(HttpStatusCode.InternalServerError) };
+        using var httpClient = new HttpClient(handler) { BaseAddress = new Uri("https://myserver:5037/") };
+        var client = new IronLedgerClient(httpClient);
+        var components = new SystemComponentData { System = ComponentData.Empty, Processors = [], Memory = [], Disks = [] };
+
+        var result = await client.SetComponentsAsync("my-asset-id", components, TestContext.CancellationToken);
+
+        Assert.IsFalse(result.IsSuccess);
+        Assert.IsNotNull(result.ErrorMessage);
+    }
+
     // --- helpers ---
 
     private sealed class FakeHandler(string content, HttpStatusCode status) : HttpMessageHandler

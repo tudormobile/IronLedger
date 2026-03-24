@@ -289,7 +289,7 @@ Is it a programming error (null argument, invalid state)?
 2. ✅ **DO** use `ArgumentException` for invalid parameter values
 3. ✅ **DO** use `ComponentDataProviderException` for provider failures
 4. ✅ **DO** include the original exception as `InnerException` when wrapping
-5. ✅ **DO** populate `ProviderName` and `WmiClassName` in provider exceptions
+5. ✅ **DO** populate `ProviderName` in provider exceptions
 6. ✅ **DO** document all exceptions in XML comments
 7. ✅ **DO** write tests for exception scenarios
 8. ❌ **DON'T** catch exceptions you can't handle meaningfully
