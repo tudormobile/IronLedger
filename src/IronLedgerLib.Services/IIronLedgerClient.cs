@@ -62,19 +62,19 @@ public interface IIronLedgerClient
     /// <summary>
     /// Asynchronously retrieves the components associated with the specified asset.
     /// </summary>
-    /// <param name="assetIdString">The unique identifier of the asset for which to retrieve notes. Cannot be null or empty.</param>
+    /// <param name="assetIdString">The unique identifier of the asset for which to retrieve components. Cannot be null or empty.</param>
     /// <param name="cancellationToken">A cancellation token that can be used to cancel the asynchronous operation.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result contains an IronLedgerResponse with the components
-    /// returns as SystemComponentData.</returns>
+    /// <returns>A task that represents the asynchronous operation. The task result contains an IronLedgerResponse with the
+    /// components returned as SystemComponentData.</returns>
     Task<IronLedgerResponse<SystemComponentData>> GetComponentsAsync(string assetIdString, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Asynchronously retrieves the components associated with the specified asset.
     /// </summary>
-    /// <param name="assetId">The identifier of the asset for which to retrieve notes.</param>
+    /// <param name="assetId">The identifier of the asset for which to retrieve components.</param>
     /// <param name="cancellationToken">A cancellation token that can be used to cancel the asynchronous operation.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result contains an IronLedgerResponse with the components
-    /// returns as SystemComponentData.</returns>
+    /// <returns>A task that represents the asynchronous operation. The task result contains an IronLedgerResponse with the
+    /// components returned as SystemComponentData.</returns>
     Task<IronLedgerResponse<SystemComponentData>> GetComponentsAsync(AssetId assetId, CancellationToken cancellationToken = default) => GetComponentsAsync(assetId.Id, cancellationToken);
 
     /// <summary>
