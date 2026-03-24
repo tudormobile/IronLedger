@@ -130,7 +130,7 @@ internal class IronLedgerClient : IIronLedgerClient
     public Task<IronLedgerResponse<string>> SetNotesAsync(string assetIdString, string notes, CancellationToken cancellationToken = default)
     {
         LogRequest();
-        ArgumentNullException.ThrowIfNull(assetIdString, nameof(assetIdString));
+        ArgumentNullException.ThrowIfNullOrEmpty(assetIdString, nameof(assetIdString));
         return ExecuteAsync<string>(
             ct =>
             {
