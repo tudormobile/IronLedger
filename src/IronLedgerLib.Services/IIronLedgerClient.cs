@@ -78,9 +78,9 @@ public interface IIronLedgerClient
     Task<IronLedgerResponse<SystemComponentData>> GetComponentsAsync(AssetId assetId, CancellationToken cancellationToken = default) => GetComponentsAsync(assetId.Id, cancellationToken);
 
     /// <summary>
-    /// Asynchronously sets the notes for the specified asset.
+    /// Asynchronously sets the components for the specified asset.
     /// </summary>
-    /// <param name="assetIdString">The unique identifier of the asset for which to set notes. Cannot be null or empty.</param>
+    /// <param name="assetIdString">The unique identifier of the asset for which to set components. Cannot be null or empty.</param>
     /// <param name="components">The components to associate with the asset.</param>
     /// <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains an IronLedgerResponse with the
@@ -88,9 +88,9 @@ public interface IIronLedgerClient
     Task<IronLedgerResponse<string>> SetComponentsAsync(string assetIdString, SystemComponentData components, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Asynchronously sets the notes for the specified asset.
+    /// Asynchronously sets the components for the specified asset.
     /// </summary>
-    /// <param name="assetId">The identifier of the asset for which to set notes. Cannot be null or empty.</param>
+    /// <param name="assetId">The identifier of the asset for which to set components. Cannot be null or empty.</param>
     /// <param name="components">The notes to associate with the asset.</param>
     /// <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains an IronLedgerResponse with the

@@ -62,14 +62,14 @@ Content-Type: application/json
 }
 ###
 
-# Get Components for a asset should return 200 Ok, 400 Bad Request, OR 404 Not Found
+# Get Components for an asset should return 200 Ok, 400 Bad Request, OR 404 Not Found
 GET {{IronLedgerLib.Services_HostAddress}}/api/v1/assets/68e129f573a1758c8ec462e75d0234a30c46c9f8a99359d4c75cfb2a7f0ce4f7/components
 Accept: application/json
 Content-Type: application/json
 
 ###
 
-# Patch components for a asset should return 200 Ok, 400 Bad Request, OR 404 Not Found
+# Patch components for an asset should return 200 Ok, 400 Bad Request, OR 404 Not Found
 PATCH {{IronLedgerLib.Services_HostAddress}}/api/v1/assets/68e129f573a1758c8ec462e75d0234a30c46c9f8a99359d4c75cfb2a7f0ce4f7/components
 Accept: application/json
 Content-Type: application/json
@@ -90,14 +90,14 @@ Content-Type: application/json
 }
 
 ###
-# Get Notes for a asset should return 200 Ok, 400 Bad Request, OR 404 Not Found
+# Get Notes for an asset should return 200 Ok, 400 Bad Request, OR 404 Not Found
 GET {{IronLedgerLib.Services_HostAddress}}/api/v1/assets/68e129f573a1758c8ec462e75d0234a30c46c9f8a99359d4c75cfb2a7f0ce4f7/notes
 Accept: application/json
 Content-Type: application/json
 
 ###
 
-# Patch Notes for a asset should return 200 Ok, 400 Bad Request, OR 404 Not Found
+# Patch Notes for an asset should return 200 Ok, 400 Bad Request, OR 404 Not Found
 PATCH {{IronLedgerLib.Services_HostAddress}}/api/v1/assets/68e129f573a1758c8ec462e75d0234a30c46c9f8a99359d4c75cfb2a7f0ce4f7/notes
 Accept: application/json
 Content-Type: application/json

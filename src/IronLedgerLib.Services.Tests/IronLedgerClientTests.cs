@@ -483,7 +483,7 @@ public class IronLedgerClientTests
     [TestMethod]
     public async Task GetNotesAsync_RequestsCorrectEndpoint()
     {
-        var handler = new MockHttpMessageHandler() { JsonResponse = "some notes" };
+        var handler = new MockHttpMessageHandler() { JsonResponse = "\"some notes\"" };
         using var httpClient = new HttpClient(handler) { BaseAddress = new Uri("https://myserver:5037/") };
         var client = new IronLedgerClient(httpClient);
 
@@ -495,7 +495,7 @@ public class IronLedgerClientTests
     [TestMethod]
     public async Task GetNotesAsync_OnSuccess_ReturnsNotes()
     {
-        const string notes = "these are the asset notes";
+        const string notes = "\"these are the asset notes\"";
         var handler = new MockHttpMessageHandler() { JsonResponse = notes };
         using var httpClient = new HttpClient(handler) { BaseAddress = new Uri("https://myserver:5037/") };
         var client = new IronLedgerClient(httpClient);
