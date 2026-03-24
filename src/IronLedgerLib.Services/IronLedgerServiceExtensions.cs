@@ -1,4 +1,8 @@
-﻿namespace Tudormobile.IronLedgerLib.Services;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
+using Tudormobile.IronLedgerLib.Serialization;
+
+namespace Tudormobile.IronLedgerLib.Services;
 
 /// <summary>
 /// Provides extension methods for registering and configuring IronLedger client and service components with dependency
@@ -65,6 +69,19 @@ public static class IronLedgerServiceExtensions
         services.AddScoped<IIronLedgerService, IronLedgerService>();
         services.AddExceptionHandler<IronLedgerExceptionHandler>();
         services.AddProblemDetails();
+
+        // Ensure Results.Ok() and other minimal-API helpers serialize with the same
+        // options as IIronLedgerSerializer so naming policy, enum handling, and the
+        // ComponentPropertyConverter are consistent between requests and responses.
+        services.ConfigureHttpJsonOptions(o =>
+        {
+            foreach (var converter in IronLedgerJsonSerializer.CreateDefaultOptions().Converters)
+                o.SerializerOptions.Converters.Add(converter);
+
+            o.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower;
+            o.SerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+        });
+
         return services;
     }
 

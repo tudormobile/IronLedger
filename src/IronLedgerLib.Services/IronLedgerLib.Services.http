@@ -12,17 +12,24 @@ Accept: application/json
 
 ###
 
-# Assets with no AssetId should return list if asset IDs
+# Assets with no AssetId should return list of asset IDs
 GET {{IronLedgerLib.Services_HostAddress}}/api/v1/assets
 Accept: application/json
 
 ###
 
-# Asset with specific Id should return 200-Ok with full Asset OR 404-NotFound
+# Asset with invalid specific Id should return 400 Bad Request
 GET {{IronLedgerLib.Services_HostAddress}}/api/v1/assets/12345
 Accept: application/json
 
 ###
+
+# Asset with specific Id should return 200-Ok with full Asset OR 404-NotFound (this one is 404 Not Found)
+GET {{IronLedgerLib.Services_HostAddress}}/api/v1/assets/000029f573a1758c8ec462e75d0234a30c46c9f8a99359d4c75cfb2a7f0ce4f7
+Accept: application/json
+
+###
+
 
 # Asset with specific Id should return 200-Ok with full Asset OR 404-NotFound
 GET {{IronLedgerLib.Services_HostAddress}}/api/v1/assets/68e129f573a1758c8ec462e75d0234a30c46c9f8a99359d4c75cfb2a7f0ce4f7
@@ -30,7 +37,7 @@ Accept: application/json
 
 ###
 
-# Post a new asset should return 200-Ok OR xxx-Duplicate asset
+# Post a new asset should return 200-Ok OR 409-Conflict
 POST {{IronLedgerLib.Services_HostAddress}}/api/v1/assets/ingest
 Accept: application/json
 Content-Type: application/json
@@ -53,4 +60,47 @@ Content-Type: application/json
   },
   "id": "68e129f573a1758c8ec462e75d0234a30c46c9f8a99359d4c75cfb2a7f0ce4f7"
 }
+###
+
+# Get Components for a asset should return 200 Ok, 400 Bad Request, OR 404 Not Found
+GET {{IronLedgerLib.Services_HostAddress}}/api/v1/assets/68e129f573a1758c8ec462e75d0234a30c46c9f8a99359d4c75cfb2a7f0ce4f7/components
+Accept: application/json
+Content-Type: application/json
+
+###
+
+# Patch components for a asset should return 200 Ok, 400 Bad Request, OR 404 Not Found
+PATCH {{IronLedgerLib.Services_HostAddress}}/api/v1/assets/68e129f573a1758c8ec462e75d0234a30c46c9f8a99359d4c75cfb2a7f0ce4f7/components
+Accept: application/json
+Content-Type: application/json
+
+{
+  "system": {
+    "metadata": {
+      "serial_number": "12345",
+      "manufacturer": "",
+      "product": ""
+    },
+    "caption": "",
+    "properties": {}
+  },
+  "processors": [],
+  "memory": [],
+  "disks": []
+}
+
+###
+# Get Notes for a asset should return 200 Ok, 400 Bad Request, OR 404 Not Found
+GET {{IronLedgerLib.Services_HostAddress}}/api/v1/assets/68e129f573a1758c8ec462e75d0234a30c46c9f8a99359d4c75cfb2a7f0ce4f7/notes
+Accept: application/json
+Content-Type: application/json
+
+###
+
+# Patch Notes for a asset should return 200 Ok, 400 Bad Request, OR 404 Not Found
+PATCH {{IronLedgerLib.Services_HostAddress}}/api/v1/assets/68e129f573a1758c8ec462e75d0234a30c46c9f8a99359d4c75cfb2a7f0ce4f7/notes
+Accept: application/json
+Content-Type: application/json
+
+This is a test, this is only a test. Do not pass go, an do not collect $200.
 ###

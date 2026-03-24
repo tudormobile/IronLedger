@@ -157,7 +157,7 @@ internal class IronLedgerService : IIronLedgerService
         return ExecuteWithBodyAsync(assetId, body, async payload =>
         {
             await _repository.SaveNotesAsync(assetId, payload, cancellationToken);
-            return Results.Ok();
+            return Results.Ok(assetId);
         }, cancellationToken);
     }
 

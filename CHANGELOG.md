@@ -8,14 +8,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Planned
-- Improve documentation
+- Asset sanitation and disposal endpoints
+- Integration tests
 
-## [0.5.0] - 
+## [0.5.0] - 2026-03-24
 
 ### Added
 - Refined the public interface
 - Moved some UI elements from Wpf sample app into a new UI library for Wpf
 - Updated package references in sample applications
+- Improved documentation
+- Added notes api to the client
+- Added components api to the client
 
 ## [0.4.0] - 2026-03-22
 

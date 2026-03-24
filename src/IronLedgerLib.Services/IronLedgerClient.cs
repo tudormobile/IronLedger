@@ -85,6 +85,65 @@ internal class IronLedgerClient : IIronLedgerClient
             deserialize: body => body);
     }
 
+    /// <inheritdoc/>
+    public Task<IronLedgerResponse<SystemComponentData>> GetComponentsAsync(string assetIdString, CancellationToken cancellationToken = default)
+    {
+        LogRequest();
+        ArgumentNullException.ThrowIfNullOrEmpty(assetIdString, nameof(assetIdString));
+        return ExecuteAsync<SystemComponentData>(
+           ct => _httpClient.GetAsync($"api/v1/assets/{assetIdString}/components", ct),
+           nameof(GetComponentsAsync),
+           cancellationToken);
+    }
+
+    /// <inheritdoc/>
+    public Task<IronLedgerResponse<string>> SetComponentsAsync(string assetIdString, SystemComponentData components, CancellationToken cancellationToken = default)
+    {
+        LogRequest();
+        ArgumentNullException.ThrowIfNull(assetIdString, nameof(assetIdString));
+        return ExecuteAsync<string>(
+            ct =>
+            {
+                var content = new StringContent(_serializer.Serialize(components), new MediaTypeHeaderValue(_serializer.ContentType));
+                return _httpClient.PatchAsync($"api/v1/assets/{assetIdString}/components", content, ct);
+            },
+            nameof(SetNotesAsync),
+            cancellationToken,
+            validate: returnedId => returnedId == assetIdString
+                ? IronLedgerResponse<string>.Success(assetIdString)
+                : IronLedgerResponse<string>.Failure($"Response ID '{returnedId}' does not match expected '{assetIdString}'."));
+    }
+
+    /// <inheritdoc/>
+    public Task<IronLedgerResponse<string>> GetNotesAsync(string assetIdString, CancellationToken cancellationToken = default)
+    {
+        LogRequest();
+        ArgumentNullException.ThrowIfNullOrEmpty(assetIdString, nameof(assetIdString));
+        return ExecuteAsync<string>(
+           ct => _httpClient.GetAsync($"api/v1/assets/{assetIdString}/notes", ct),
+           nameof(GetNotesAsync),
+           cancellationToken,
+           deserialize: body => body);
+    }
+
+    /// <inheritdoc/>
+    public Task<IronLedgerResponse<string>> SetNotesAsync(string assetIdString, string notes, CancellationToken cancellationToken = default)
+    {
+        LogRequest();
+        ArgumentNullException.ThrowIfNull(assetIdString, nameof(assetIdString));
+        return ExecuteAsync<string>(
+            ct =>
+            {
+                var content = new StringContent(notes);
+                return _httpClient.PatchAsync($"api/v1/assets/{assetIdString}/notes", content, ct);
+            },
+            nameof(SetNotesAsync),
+            cancellationToken,
+            validate: returnedId => returnedId == assetIdString
+                ? IronLedgerResponse<string>.Success(assetIdString)
+                : IronLedgerResponse<string>.Failure($"Response ID '{returnedId}' does not match expected '{assetIdString}'."));
+    }
+
     private void LogRequest([CallerMemberName] string callerName = "")
     {
         if (!_logger.IsEnabled(LogLevel.Information))

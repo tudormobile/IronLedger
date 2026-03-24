@@ -7,6 +7,7 @@ using Tudormobile.IronLedgerLib;
 
 using Tudormobile.IronLedgerLib.Services;
 using Tudormobile.IronLedgerLib.UI;
+using Tudormobile.IronLedgerLib.UI.Wpf;
 ```
 
 - [Tudormobile.IronLedgerLib](Tudormobile.IronLedgerLib.yml)
@@ -15,6 +16,8 @@ using Tudormobile.IronLedgerLib.UI;
     - Web services.
 - [Tudormobile.IronLedgerLib.UI](Tudormobile.IronLedgerLib.UI.yml)
     - UI elements.
+- [Tudormobile.IronLedgerLib.UI.Wpf](Tudormobile.IronLedgerLib.UI.Wpf.yml)
+    - Windows desktop UI elements.
 
 Latest unit testing results are shown below.
 [!include[summary](../../src/output/SummaryGithub.md)]
