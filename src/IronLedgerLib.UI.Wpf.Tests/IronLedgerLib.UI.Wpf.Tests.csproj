@@ -17,4 +17,7 @@
     <Using Include="Tudormobile.IronLedgerLib.UI" />
     <Using Include="Tudormobile.IronLedgerLib.UI.Wpf" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Update="Microsoft.Testing.Extensions.CodeCoverage" Version="18.5.2" />
+  </ItemGroup>
 </Project>

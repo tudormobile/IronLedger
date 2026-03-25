@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using Tudormobile.IronLedgerLib;
 
 namespace AssetManager
 {
@@ -10,6 +11,7 @@ namespace AssetManager
         public MainWindow()
         {
             InitializeComponent();
+            this.DataContext = new AssetIdFactory().Create();
         }
     }
 }

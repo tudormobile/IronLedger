@@ -14,4 +14,7 @@
     <Using Include="System.Globalization" />
     <Using Include="Tudormobile.IronLedgerLib" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Update="Microsoft.Testing.Extensions.CodeCoverage" Version="18.5.2" />
+  </ItemGroup>
 </Project>
