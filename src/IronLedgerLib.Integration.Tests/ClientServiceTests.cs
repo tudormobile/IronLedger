@@ -12,6 +12,7 @@ public class ClientServiceTests
     private static WebApplication _app = null!;
     private static IIronLedgerClient _client = null!;
     private static string _tempPath = null!;
+    private static HttpClient _httpClient;
 
     public TestContext TestContext { get; set; } = null!;
 
@@ -34,7 +35,8 @@ public class ClientServiceTests
             .Features.Get<IServerAddressesFeature>()!
             .Addresses.First();
 
-        _client = IIronLedgerClient.Create(new HttpClient { BaseAddress = new Uri(address) });
+        _httpClient = new HttpClient { BaseAddress = new Uri(address) };
+        _client = IIronLedgerClient.Create(_httpClient);
     }
 
     [ClassCleanup]
@@ -44,6 +46,7 @@ public class ClientServiceTests
         await _app.DisposeAsync();
         if (Directory.Exists(_tempPath))
             Directory.Delete(_tempPath, recursive: true);
+        _httpClient.Dispose();
     }
 
     [TestMethod]
