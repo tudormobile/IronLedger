@@ -16,8 +16,10 @@ using Tudormobile.IronLedgerLib.UI.Wpf;
     - Web services.
 - [Tudormobile.IronLedgerLib.UI](Tudormobile.IronLedgerLib.UI.yml)
     - UI elements.
-- [Tudormobile.IronLedgerLib.UI.Wpf](Tudormobile.IronLedgerLib.UI.Wpf.yml)
-    - Windows desktop UI elements.
+- [Tudormobile.IronLedgerLib.UI.Wpf.Converters](Tudormobile.IronLedgerLib.UI.Wpf.Converters.yml)
+    - Windows desktop UI converters.
+- [Tudormobile.IronLedgerLib.UI.Wpf.Views](Tudormobile.IronLedgerLib.UI.Wpf.Views.yml)
+    - Windows desktop UI views.
 
 Latest unit testing results are shown below.
 [!include[summary](../../src/output/SummaryGithub.md)]
