@@ -15,4 +15,7 @@
     <Using Include="Tudormobile.IronLedgerLib" />
     <Using Include="Tudormobile.IronLedgerLib.UI" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Update="Microsoft.Testing.Extensions.CodeCoverage" Version="18.5.2" />
+  </ItemGroup>
 </Project>

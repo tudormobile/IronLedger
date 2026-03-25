@@ -9,7 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Planned
 - Asset sanitation and disposal endpoints
-- Integration tests
+
+## [0.6.0] - 2026-03-25
+
+### Added
+- Bug fixes
+- Integration test project
 
 ## [0.5.0] - 2026-03-24
 
